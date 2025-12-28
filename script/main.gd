@@ -15,8 +15,10 @@ var current_screen_id = 0
 var pet_library = {
 	"Mudkip": preload("res://scene/poke/Mudkip.tscn"),
 	"Pichu": preload("res://scene/poke/Pichu.tscn"),
-	# "Pichu": preload("res://Pets/Pichu.tscn")
 }
+
+# Track hover state to prevent lag
+var last_hovered_pet = null 
 
 func _ready():
 	get_tree().root.set_transparent_background(true)
@@ -34,44 +36,115 @@ func _ready():
 	spawn_pet("Mudkip", Vector2(500, floor_level))
 
 func _process(_delta):
-	# 1. MENU MODE (Window Solid)
 	if menu.visible:
 		DisplayServer.window_set_mouse_passthrough([])
 		return 
 
-	# 2. PET MODE (Window Transparent with Cutouts)
-	var polygon = PackedVector2Array()
-	var min_x = 99999.0; var max_x = -99999.0
-	var min_y = 99999.0; var max_y = -99999.0
-	var found_any_pet = false
+	# --- 🛠️ CUSTOMIZATION ZONE 🛠️ ---
+	var pad_sides = -100.0  
+	var pad_top = 10.0    
+	var pad_bottom = 0.0 
+	# ----------------------------------
 
+	# 1. CREATE SEPARATE BOXES FOR EACH PET
+	# We start with a list of separate polygons.
+	var distinct_polygons = []
+	
 	for pet in current_pets:
 		if not is_instance_valid(pet): continue
-		found_any_pet = true
 		
-		var size = pet.get_current_size()
-		var half_w = size.x / 2.0
-		var half_h = size.y / 2.0
-		var visual_offset_y = pet.anim.offset.y
+		var full_size = pet.get_current_size()
+		var p_x = pet.global_position.x
+		var p_y = pet.global_position.y
 		
-		var buffer = 10.0
-		var extra_top_padding = 50.0 
+		var left_x = p_x - (full_size.x / 2.0) - pad_sides
+		var right_x = p_x + (full_size.x / 2.0) + pad_sides
+		var top_y = p_y - (full_size.y / 2.0) - pad_top
+		var bottom_y = p_y + (full_size.y / 2.0) + pad_bottom
 		
-		if pet.global_position.x - half_w < min_x: min_x = pet.global_position.x - half_w - buffer
-		if pet.global_position.x + half_w > max_x: max_x = pet.global_position.x + half_w + buffer
-		if pet.global_position.y - half_h + visual_offset_y < min_y: 
-			min_y = pet.global_position.y - half_h + visual_offset_y - buffer - extra_top_padding
-		if pet.global_position.y + half_h + visual_offset_y > max_y: 
-			max_y = pet.global_position.y + half_h + visual_offset_y + buffer
+		var box = PackedVector2Array([
+			Vector2(left_x, top_y),
+			Vector2(right_x, top_y),
+			Vector2(right_x, bottom_y),
+			Vector2(left_x, bottom_y)
+		])
+		distinct_polygons.append(box)
+
+	# 2. MERGE OVERLAPPING BOXES (The Fix)
+	# Geometry2D handles the math so the overlapping area becomes one solid shape.
+	var merged_result = []
 	
-	if found_any_pet:
-		polygon.append(Vector2(min_x, min_y))
-		polygon.append(Vector2(max_x, min_y))
-		polygon.append(Vector2(max_x, max_y))
-		polygon.append(Vector2(min_x, max_y))
-		DisplayServer.window_set_mouse_passthrough(polygon)
+	if distinct_polygons.is_empty():
+		# Safety triangle if no pets exist
+		merged_result.append(PackedVector2Array([Vector2(0,0), Vector2(1,0), Vector2(0,1)]))
 	else:
-		DisplayServer.window_set_mouse_passthrough([])
+		# Start with the first pet's box
+		merged_result = [distinct_polygons[0]]
+		
+		# Try to merge every other pet into the result
+		for i in range(1, distinct_polygons.size()):
+			var new_poly = distinct_polygons[i]
+			
+			# We must check against all existing islands in our result
+			var did_merge = false
+			var new_merged_list = []
+			
+			for existing_poly in merged_result:
+				# Geometry2D.merge_polygons returns an ARRAY of polygons (parts)
+				# If they don't touch, it returns 2 parts. If they touch, 1 part.
+				var merge_attempt = Geometry2D.merge_polygons(existing_poly, new_poly)
+				
+				# If the result is 1 polygon, it means they touched and merged!
+				# However, merge_polygons is tricky. A simpler approach for the loop:
+				pass 
+			
+			# Actually, the loop logic for merging N polygons is complex. 
+			# Let's use the simpler "Iterative Union" approach provided by Godot docs.
+			merged_result = _union_polygons(merged_result, new_poly)
+
+	# 3. CONVERT TO SINGLE PASSTHROUGH PATH
+	# DisplayServer needs ONE path. If we have islands (Pet A far left, Pet B far right),
+	# we connect them with invisible lines.
+	var final_polygon = PackedVector2Array()
+	
+	for i in range(merged_result.size()):
+		var poly = merged_result[i]
+		final_polygon.append_array(poly)
+		# Close the loop for this island
+		final_polygon.append(poly[0])
+		
+		# If there is another island after this, add a connecting line
+		if i < merged_result.size() - 1:
+			var next_poly = merged_result[i+1]
+			final_polygon.append(next_poly[0])
+
+	DisplayServer.window_set_mouse_passthrough(final_polygon)
+
+# --- HELPER FUNCTION FOR MATH ---
+# Paste this function at the bottom of Main.gd
+func _union_polygons(current_polys: Array, new_poly: PackedVector2Array) -> Array:
+	var result = current_polys.duplicate()
+	var poly_to_add = new_poly
+	
+	# Try to merge 'poly_to_add' with any existing polygon that overlaps it
+	var i = 0
+	while i < result.size():
+		var existing = result[i]
+		var merged = Geometry2D.merge_polygons(existing, poly_to_add)
+		
+		if merged.size() == 1:
+			# They overlapped and became one! 
+			# Remove the old one, and update our 'poly_to_add' to be this new bigger shape
+			poly_to_add = merged[0]
+			result.remove_at(i)
+			# Reset loop to check if this bigger shape now overlaps others
+			i = 0 
+		else:
+			# They didn't overlap, check the next one
+			i += 1
+			
+	result.append(poly_to_add)
+	return result
 
 # --- MONITOR MANAGEMENT ---
 
@@ -92,7 +165,7 @@ func setup_window_for_screen(screen_id):
 	
 	for pet in current_pets:
 		pet.floor_y = new_floor_y
-		# If pet is now "underground" (because new screen is shorter), snap them up
+		# If pet is now "underground", snap them up
 		if pet.global_position.y > new_floor_y:
 			pet.global_position.y = new_floor_y - 20
 
@@ -137,7 +210,7 @@ func _on_pet_request_menu(pet_node):
 			menu.set_item_disabled(spawn_index, true)
 		spawn_index += 1
 	
-	# B. MONITOR SECTION (New!)
+	# B. MONITOR SECTION
 	menu.add_separator("Display Settings")
 	var monitor_count = DisplayServer.get_screen_count()
 	# IDs 200+ are for monitors
@@ -146,7 +219,7 @@ func _on_pet_request_menu(pet_node):
 		if i == current_screen_id:
 			text += " (Current)"
 			menu.add_item(text, 200 + i)
-			menu.set_item_disabled(menu.get_item_count() - 1, true) # Disable current
+			menu.set_item_disabled(menu.get_item_count() - 1, true) 
 		else:
 			menu.add_item(text, 200 + i)
 
@@ -183,9 +256,5 @@ func _on_menu_item_pressed(id):
 		current_screen_id = target_screen
 		setup_window_for_screen(target_screen)
 
-# Add this to the bottom of Main.gd
 func _on_menu_closed():
-	# This function triggers when the menu closes.
-	# We don't need special logic here because _process() automatically 
-	# switches back to "Transparent Mode" when menu.visible becomes false.
 	pass

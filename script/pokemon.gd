@@ -255,7 +255,16 @@ func _on_area_2d_input_event(_viewport, event, _shape_idx):
 			emit_signal("request_menu", self)
 
 func get_current_size():
+	# Safety Check 1: Does the 'anim' node exist?
+	if not is_instance_valid(anim):
+		return Vector2(100, 100) # Return default if node is missing
+
+	# Safety Check 2: Does it have frames loaded?
 	if anim.sprite_frames:
 		var tex = anim.sprite_frames.get_frame_texture(anim.animation, anim.frame)
-		if tex: return tex.get_size() * anim.scale * scale
+		# Safety Check 3: Is the texture valid?
+		if tex: 
+			# Your calculation was correct:
+			return tex.get_size() * anim.scale * scale
+			
 	return Vector2(100, 100)
