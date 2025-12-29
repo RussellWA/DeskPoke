@@ -16,10 +16,10 @@ var current_state = IDLE
 var state_timer = 0.0
 
 # --- ENERGY SYSTEM ---
-#var energy = 50
-#var max_energy = 50.0
-var energy = 1500
-var max_energy = 1500.0
+var energy = 50
+var max_energy = 50.0
+#var energy = 1500
+#var max_energy = 1500.0
 var energy_drain_rate = 5.0   # How fast it gets tired (per second)
 var energy_regen_rate = 10.0  # How fast it recovers when sleeping
 
@@ -27,13 +27,13 @@ var energy_regen_rate = 10.0  # How fast it recovers when sleeping
 	"idle": 0,
 	"walk": 0,
 	"dragged": 0,
-	"fall": 9,
-	"get_up": -7,
+	"fall": 0,
+	"get_up": 0,
 	"deep_breath": 0,
-	"pose": -4,
-	"sleep": -7,
-	"wake": -7,
-	"recover": 9,
+	"pose": 0,
+	"sleep": 0,
+	"wake": 0,
+	"recover": 0,
 }
 
 # --- REFERENCES ---

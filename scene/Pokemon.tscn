@@ -433,6 +433,18 @@ height = 28.666668
 scale = Vector2(3, 3)
 collision_mask = 0
 script = ExtResource("1_tgck3")
+anim_offsets = {
+"deep_breath": 0,
+"dragged": 0,
+"fall": 7,
+"get_up": -9,
+"idle": 0,
+"pose": -4,
+"recover": 9,
+"sleep": -4,
+"wake": -9,
+"walk": 0
+}
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 texture_repeat = 1

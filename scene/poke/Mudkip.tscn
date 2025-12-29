@@ -433,4 +433,4 @@ anim_offsets = {
 
 [node name="AnimatedSprite2D" parent="." index="0"]
 sprite_frames = SubResource("SpriteFrames_0nvb6")
-animation = &"recover"
+animation = &"wake"

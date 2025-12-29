@@ -15,6 +15,7 @@ var current_screen_id = 0
 var pet_library = {
 	"Mudkip": preload("res://scene/poke/Mudkip.tscn"),
 	"Pichu": preload("res://scene/poke/Pichu.tscn"),
+	"Togedemaru": preload("res://scene/poke/Togedemaru.tscn"),
 }
 
 # Track hover state to prevent lag
@@ -42,8 +43,9 @@ func _process(_delta):
 
 	# --- 🛠️ CUSTOMIZATION ZONE 🛠️ ---
 	var pad_sides = -100.0  
-	var pad_top = 10.0    
+	var pad_top = 15.0    
 	var pad_bottom = 0.0 
+	#var pad_bottom = -40.0 # Reality
 	# ----------------------------------
 
 	# 1. CREATE SEPARATE BOXES FOR EACH PET
@@ -72,6 +74,8 @@ func _process(_delta):
 
 	# 2. MERGE OVERLAPPING BOXES (The Fix)
 	# Geometry2D handles the math so the overlapping area becomes one solid shape.
+	# 2. MERGE OVERLAPPING BOXES (The Fix)
+	# Geometry2D handles the math so the overlapping area becomes one solid shape.
 	var merged_result = []
 	
 	if distinct_polygons.is_empty():
@@ -85,21 +89,7 @@ func _process(_delta):
 		for i in range(1, distinct_polygons.size()):
 			var new_poly = distinct_polygons[i]
 			
-			# We must check against all existing islands in our result
-			var did_merge = false
-			var new_merged_list = []
-			
-			for existing_poly in merged_result:
-				# Geometry2D.merge_polygons returns an ARRAY of polygons (parts)
-				# If they don't touch, it returns 2 parts. If they touch, 1 part.
-				var merge_attempt = Geometry2D.merge_polygons(existing_poly, new_poly)
-				
-				# If the result is 1 polygon, it means they touched and merged!
-				# However, merge_polygons is tricky. A simpler approach for the loop:
-				pass 
-			
-			# Actually, the loop logic for merging N polygons is complex. 
-			# Let's use the simpler "Iterative Union" approach provided by Godot docs.
+			# We just use the helper function:
 			merged_result = _union_polygons(merged_result, new_poly)
 
 	# 3. CONVERT TO SINGLE PASSTHROUGH PATH
