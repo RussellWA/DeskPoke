@@ -12,14 +12,13 @@ func spawn_pet():
 	
 	var pet = PET_SCENE.instantiate()
 
-	pet.position = Vector2(
-		DesktopController.desktop_rect.size.x / 2.0,
-		DesktopController.get_ground_y()
-	)
+	add_child(pet)
+	
+	pet.position.x = DesktopController.desktop_rect.size.x / 2.0
+	pet.stand_on_ground()
 	
 	print("Pet pos: ", pet.position)
 
-	add_child(pet)
 	pets.append(pet)
 
 func despawn_pet(pet: Pet) -> void:

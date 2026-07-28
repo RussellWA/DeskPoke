@@ -4,7 +4,6 @@
 [ext_resource type="Script" uid="uid://dvy741no20jqk" path="res://scripts/pet/movement_controller.gd" id="2_8wqpi"]
 [ext_resource type="Script" uid="uid://xlfwr808xv0p" path="res://scripts/pet/animation_controller.gd" id="3_axfbl"]
 [ext_resource type="Script" uid="uid://d008n0avr4f5y" path="res://scripts/pet/behavior_controller.gd" id="3_hmkkh"]
-[ext_resource type="Texture2D" uid="uid://fx2xgw2jv6l6" path="res://icon.svg" id="5_axfbl"]
 [ext_resource type="Texture2D" uid="uid://dmhva3nqvel0v" path="res://assets/mudkip/Pose-Anim.png" id="6_5c8qe"]
 [ext_resource type="Texture2D" uid="uid://kktaus8a4v7e" path="res://assets/mudkip/Walk-Anim.png" id="7_5c8qe"]
 
@@ -101,10 +100,6 @@ animations = [{
 [node name="Pet" type="CharacterBody2D" unique_id=922571468]
 script = ExtResource("1_mdqe4")
 
-[node name="Timer" type="Timer" parent="." unique_id=732348391]
-
-[node name="Timer2" type="Timer" parent="." unique_id=336596052]
-
 [node name="Area2D" type="Area2D" parent="." unique_id=1524686757]
 visible = false
 
@@ -123,10 +118,6 @@ script = ExtResource("3_hmkkh")
 [node name="Timer" type="Timer" parent="BehaviorController" unique_id=1920265054]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=2026992028]
-
-[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1139900807]
-scale = Vector2(0.3, 0.3)
-texture = ExtResource("5_axfbl")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=918383455]
 sprite_frames = SubResource("SpriteFrames_h3mvd")
