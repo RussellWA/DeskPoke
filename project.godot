@@ -11,19 +11,26 @@ config_version=5
 [application]
 
 config/name="DeskPoke"
-run/main_scene="uid://bsymy1pvltvym"
+run/main_scene="uid://csixj172s2h2e"
 config/features=PackedStringArray("4.6", "GL Compatibility")
 run/max_fps=60
 run/low_processor_mode=true
 config/icon="res://icon.svg"
 
+[autoload]
+
+DesktopController="*uid://dhcr4pu6jjqwk"
+
 [display]
 
+window/size/viewport_width=1920
+window/size/viewport_height=1080
 window/size/mode=2
 window/size/borderless=true
 window/size/always_on_top=true
 window/size/transparent=true
 window/stretch/mode="canvas_items"
+window/stretch/aspect="expand"
 window/per_pixel_transparency/allowed=true
 window/vsync/vsync_mode=0
 

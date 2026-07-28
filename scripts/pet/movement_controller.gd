@@ -11,14 +11,12 @@ var speed: float = 60.0
 var direction: int = 1
 #var gravity: float = 1500.0
 var moving: bool = false
-var left_limit: int
-var right_limit: int
 
 func _physics_process(_delta: float) -> void:
-	if pet.position.x <= left_limit:
+	if pet.position.x <= DesktopController.get_left_boundary():
 		hit_left.emit()
 	
-	if pet.position.x >= right_limit:
+	if pet.position.x >= DesktopController.get_right_boundary():
 		hit_right.emit()
 
 func walk(dir: int):
