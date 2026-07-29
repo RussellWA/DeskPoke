@@ -5,12 +5,14 @@ const MAX_PETS := 6
 
 var pets: Array[Pet] = []
 
-func spawn_pet():
+func spawn_pet(data: PokeData):
 	if pets.size() >= MAX_PETS:
 		print("Maximum pets reached.")
 		return
 	
 	var pet = PET_SCENE.instantiate()
+	
+	pet.pokemon_data = data
 
 	add_child(pet)
 	

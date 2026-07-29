@@ -4,6 +4,8 @@ class_name Pet
 
 var window_size: Vector2i
 
+var pokemon_data: PokeData
+
 @onready var movement_controller = $MovementController
 @onready var sprite := $AnimatedSprite2D
 @export var pet_scale := 2.0
