@@ -15,7 +15,7 @@ enum State {
 
 var state: State
 
-func _ready() -> void:
+func start() -> void:
 	enter_walking()
 
 func _on_timer_timeout():

@@ -25,9 +25,31 @@ func import_pokemon(folder_path: String) -> PokeData:
 		
 		anim.sprite_frames = sprite_importer.import_animation(
 			sprite_path,
-			anim
+			anim,
+			get_facing(anim.name)
 		)
 		
 		pokemon.animations[anim.name] = anim
 
 	return pokemon
+
+func get_facing(anim_name: String) -> int:
+	match anim_name:
+		"Walk":
+			return Direction.Facing.RIGHT
+		"Run":
+			return Direction.Facing.RIGHT
+		"Attack":
+			return Direction.Facing.RIGHT
+
+		"Pose":
+			return Direction.Facing.DOWN
+		"Idle":
+			return Direction.Facing.DOWN
+		"Sleep":
+			return Direction.Facing.DOWN
+		"Hurt":
+			return Direction.Facing.DOWN
+
+		_:
+			return Direction.Facing.DOWN

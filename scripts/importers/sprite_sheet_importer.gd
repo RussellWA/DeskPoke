@@ -3,7 +3,8 @@ class_name SpriteSheetImporter
 
 func import_animation(
 	image_path: String,
-	anim: AnimationData
+	anim: AnimationData,
+	row: Direction.Facing
 ) -> SpriteFrames:
 	var texture = load(image_path)
 
@@ -18,24 +19,22 @@ func import_animation(
 	var image_height = texture.get_height()
 
 	var columns = image_width / anim.frame_width
-	var rows = image_height / anim.frame_height
 	
-	for row in range(rows):
-		for column in range(columns):
-			var region := Rect2(
-				column * anim.frame_width,
-				row * anim.frame_height,
-				anim.frame_width,
-				anim.frame_height
-			)
-			
-			var atlas := AtlasTexture.new()
-			atlas.atlas = texture
-			atlas.region = region
-			
-			sprite_frames.add_frame(
-				anim.name,
-				atlas
-			)
+	for column in range(columns):
+		var region := Rect2(
+			column * anim.frame_width,
+			row * anim.frame_height,
+			anim.frame_width,
+			anim.frame_height
+		)
+		
+		var atlas := AtlasTexture.new()
+		atlas.atlas = texture
+		atlas.region = region
+		
+		sprite_frames.add_frame(
+			anim.name,
+			atlas
+		)
 	
 	return sprite_frames
