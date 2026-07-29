@@ -4,7 +4,7 @@ class_name AnimXmlParser
 func parse(xml_path: String) -> Array[AnimationData]:
 	var parser := XMLParser.new()
 
-	if parser.open(xml_path) != OK:
+	if parser.open(xml_path+"/AnimData.xml") != OK:
 		push_error("Failed to open XML.")
 		return []
 
@@ -12,6 +12,8 @@ func parse(xml_path: String) -> Array[AnimationData]:
 
 	var current_animation: AnimationData = null
 	var current_tag := ""
+	
+	print(parser.read() == OK)
 
 	while parser.read() == OK:
 
@@ -36,8 +38,8 @@ func parse(xml_path: String) -> Array[AnimationData]:
 					"Name":
 						current_animation.name = text
 
-					"Index":
-						current_animation.index = int(text)
+					#"Index":
+						#current_animation.index = int(text)
 
 					"FrameWidth":
 						current_animation.frame_width = int(text)

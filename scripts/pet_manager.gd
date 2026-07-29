@@ -12,9 +12,9 @@ func spawn_pet(data: PokeData):
 	
 	var pet = PET_SCENE.instantiate()
 	
-	pet.pokemon_data = data
-
 	add_child(pet)
+	
+	pet.setup(data)
 	
 	pet.position.x = DesktopController.desktop_rect.size.x / 2.0
 	pet.stand_on_ground()
