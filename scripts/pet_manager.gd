@@ -7,15 +7,15 @@ var pets: Array[Pet] = []
 
 func spawn_pet(data: PokeData):
 	if pets.size() >= MAX_PETS:
-		print("Maximum pets reached.")
 		return
 	
 	var pet = PET_SCENE.instantiate()
+
+	pet.add_to_group("pets") 
 	
 	add_child(pet)
 	
 	pet.setup(data)
-	
 	pet.position.x = DesktopController.desktop_rect.size.x / 2.0
 	pet.position.y = DesktopController.get_ground_y()
 
@@ -27,3 +27,6 @@ func despawn_pet(pet: Pet) -> void:
 
 	pets.erase(pet)
 	pet.queue_free()
+
+func get_pets() -> Array[Pet]:
+	return pets

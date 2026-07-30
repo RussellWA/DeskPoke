@@ -37,12 +37,6 @@ input_pickable = true
 script = ExtResource("1_mdqe4")
 pet_scale = 3.0
 
-[node name="Area2D" type="Area2D" parent="." unique_id=1524686757]
-visible = false
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" unique_id=1016474475]
-visible = false
-
 [node name="MovementController" type="Node" parent="." unique_id=1812300371]
 script = ExtResource("2_8wqpi")
 
