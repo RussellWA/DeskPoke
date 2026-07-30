@@ -6,31 +6,7 @@
 [ext_resource type="Script" uid="uid://d008n0avr4f5y" path="res://scripts/pet/behavior_controller.gd" id="3_hmkkh"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_hmkkh"]
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hmkkh"]
-content_margin_left = 8.0
-content_margin_top = 8.0
-content_margin_right = 8.0
-content_margin_bottom = 8.0
-bg_color = Color(0.16862746, 0.3137255, 0.4862745, 1)
-border_width_left = 4
-border_width_top = 4
-border_width_right = 4
-border_width_bottom = 4
-border_color = Color(1, 1, 1, 1)
-corner_radius_top_left = 4
-corner_radius_top_right = 4
-corner_radius_bottom_right = 4
-corner_radius_bottom_left = 4
-anti_aliasing = false
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6nmc3"]
-bg_color = Color(0.23137255, 0.50980395, 0.76862746, 1)
-corner_radius_top_left = 4
-corner_radius_top_right = 4
-corner_radius_bottom_right = 4
-corner_radius_bottom_left = 4
-anti_aliasing = false
+size = Vector2(25, 25)
 
 [node name="Pet" type="CharacterBody2D" unique_id=922571468]
 input_pickable = true
@@ -55,24 +31,6 @@ shape = SubResource("RectangleShape2D_hmkkh")
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=918383455]
 animation = &""
 
-[node name="RightClickMenu" type="PopupMenu" parent="." unique_id=88057415]
-oversampling_override = 1.0
-title = "Mudkip"
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 4
-theme_override_font_sizes/font_size = 5
-theme_override_styles/panel = SubResource("StyleBoxFlat_hmkkh")
-theme_override_styles/hover = SubResource("StyleBoxFlat_6nmc3")
-hide_on_item_selection = false
-hide_on_checkable_item_selection = false
-item_count = 2
-item_0/text = "+"
-item_0/id = 0
-item_1/text = "-"
-item_1/id = 1
-
 [connection signal="hit_left" from="MovementController" to="BehaviorController" method="_on_movement_controller_hit_left"]
 [connection signal="hit_right" from="MovementController" to="BehaviorController" method="_on_movement_controller_hit_right"]
 [connection signal="timeout" from="BehaviorController/Timer" to="BehaviorController" method="_on_timer_timeout"]
-[connection signal="id_pressed" from="RightClickMenu" to="." method="_on_right_click_menu_id_pressed"]
