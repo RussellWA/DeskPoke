@@ -1,6 +1,8 @@
 extends Node
 
 @onready var sprite: AnimatedSprite2D = $"../AnimatedSprite2D"
+@onready var collision: CollisionShape2D = $"../CollisionShape2D"
+
 var pokemon_data: PokeData
 
 func setup(data: PokeData):
@@ -15,6 +17,7 @@ func load_animation(animation_name: String):
 	var center_y = anim.frame_height / 2.0
 	
 	sprite.offset.y = center_y - anim.ground_offset
+	collision.position.y = center_y - anim.ground_offset - 4
 		
 	play(animation_name)
 
