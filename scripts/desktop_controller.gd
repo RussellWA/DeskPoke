@@ -1,5 +1,6 @@
 extends Node
 
+@onready var ui_panel: Control = $"../CanvasLayer/UIPanel"
 var desktop_rect: Rect2i
 
 func _ready() -> void:
@@ -22,55 +23,64 @@ func get_ground_y() -> float:
 
 func _process(delta):
 	var active_pets = get_tree().get_nodes_in_group("pets")
-	
-	# This array will hold the points of our clickable areas
 	var poly = PackedVector2Array()
 
-	if active_pets.is_empty():
-		# If there are no pets, make a tiny 1x1 pixel in the corner clickable.
-		# This makes 99.9% of your screen completely passthrough to the desktop.
+	var hub_point = Vector2.ZERO
+	var has_hub = false
+
+	# 1. ADD UI PANEL TO PASSTHROUGH POLYGON (So clicks work on UI buttons!)
+	if ui_panel and ui_panel.visible:
+		var rect = ui_panel.get_global_rect()
+		var top_left = rect.position
+		var top_right = top_left + Vector2(rect.size.x, 0)
+		var bottom_right = top_left + rect.size
+		var bottom_left = top_left + Vector2(0, rect.size.y)
+		
+		hub_point = top_left
+		has_hub = true
+		
+		poly.append(top_left)
+		poly.append(top_right)
+		poly.append(bottom_right)
+		poly.append(bottom_left)
+		poly.append(top_left)
+
+	# 2. ADD PETS TO PASSTHROUGH POLYGON (Your existing code)
+	for i in range(active_pets.size()):
+		var pet = active_pets[i]
+		var sprite = pet.get_node_or_null("AnimatedSprite2D")
+		
+		if sprite and sprite.sprite_frames:
+			var texture = sprite.sprite_frames.get_frame_texture(sprite.animation, sprite.frame)
+			if texture:
+				var tex_size = texture.get_size()
+				var offset = sprite.offset
+				if sprite.centered:
+					offset -= tex_size / 2.0
+					
+				var top_left = sprite.global_position + (offset * sprite.global_scale)
+				var rect_size = tex_size * sprite.global_scale
+				
+				var top_right = top_left + Vector2(rect_size.x, 0)
+				var bottom_right = top_left + rect_size
+				var bottom_left = top_left + Vector2(0, rect_size.y)
+				
+				if not has_hub:
+					hub_point = top_left
+					has_hub = true
+					
+				poly.append(top_left)
+				poly.append(top_right)
+				poly.append(bottom_right)
+				poly.append(bottom_left)
+				poly.append(top_left)
+				poly.append(hub_point) # Trace back to hub
+
+	# If nothing is on screen, fallback to 1x1 pixel
+	if poly.is_empty():
 		poly.append(Vector2(0, 0))
 		poly.append(Vector2(1, 0))
 		poly.append(Vector2(1, 1))
 		poly.append(Vector2(0, 1))
-	else:
-		var hub_point = Vector2.ZERO
-		
-		for i in range(active_pets.size()):
-			var pet = active_pets[i]
-			var sprite = pet.get_node_or_null("AnimatedSprite2D")
-			
-			if sprite and sprite.sprite_frames:
-				# 1. Get the actual image (texture) of the exact animation frame playing right now
-				var texture = sprite.sprite_frames.get_frame_texture(sprite.animation, sprite.frame)
-				
-				if texture:
-					var tex_size = texture.get_size()
-					var offset = sprite.offset
-					
-					if sprite.centered:
-						offset -= tex_size / 2.0
-						
-					var top_left = sprite.global_position + (offset * sprite.global_scale)
-					var rect_size = tex_size * sprite.global_scale
-					
-					var top_right = top_left + Vector2(rect_size.x, 0)
-					var bottom_right = top_left + rect_size
-					var bottom_left = top_left + Vector2(0, rect_size.y)
-					
-					# Save the very first point of the first pet as our "Hub"
-					if i == 0:
-						hub_point = top_left
-						
-					# Draw the polygon around the current animation frame
-					poly.append(top_left)
-					poly.append(top_right)
-					poly.append(bottom_right)
-					poly.append(bottom_left)
-					
-					# Close the square, and trace a zero-width line back to the Hub
-					poly.append(top_left)
-					poly.append(hub_point)
 
-	# Send the final polygon to the Operating System
 	DisplayServer.window_set_mouse_passthrough(poly)
