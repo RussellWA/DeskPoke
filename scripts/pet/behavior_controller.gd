@@ -6,6 +6,8 @@ extends Node
 
 @onready var timer: Timer = $Timer 
 
+var pokemon_data: PokeData
+
 enum State {
 	IDLE,
 	WALKING,
@@ -14,8 +16,21 @@ enum State {
 }
 
 var state: State
+var idle_anims: Array[String] = []
+var possible_idles = ["Idle", "Pose", "Nod", "Hop"]
 
-func start() -> void:
+func start(data: PokeData) -> void:
+	pokemon_data = data
+	
+	idle_anims.clear()
+	
+	for anim_name in possible_idles:
+		if pokemon_data.animations.has(anim_name):
+			idle_anims.append(anim_name)
+	
+	if idle_anims.is_empty():
+		push_warning("No idle animations found for " + pokemon_data.name)
+	
 	enter_walking()
 
 func _on_timer_timeout():
@@ -28,18 +43,21 @@ func _on_timer_timeout():
 func enter_idle() -> void:
 	state = State.IDLE
 	movement_controller.stop()
-	animation_controller.enter_idle()
-	timer.start(2)
+	var random_idle = idle_anims.pick_random()
+	animation_controller.enter_idle(random_idle)
+	timer.start(4)
 
 func enter_walking() -> void:
 	state = State.WALKING
-	var direction = movement_controller.get_direction()
-	animation_controller.enter_walk(direction)
-	movement_controller.walk(direction)
-	timer.start(3)
+	var random_dir = [-1, 1].pick_random()
+	animation_controller.enter_walk(random_dir)
+	movement_controller.walk(random_dir)
+	timer.start(6)
 
 func _on_movement_controller_hit_left() -> void:
 	movement_controller.walk(1)
+	animation_controller.enter_walk(1)
 
 func _on_movement_controller_hit_right() -> void:
 	movement_controller.walk(-1)
+	animation_controller.enter_walk(-1)

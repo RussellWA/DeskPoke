@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://d0lyb3cf7ypac"
-path="res://.godot/imported/Walk-Offsets.png-edccb8146f2431d7b7012c16d501d8a1.ctex"
+uid="uid://6jir4imcfxdk"
+path="res://.godot/imported/Sleep-Shadow.png-66269374c7f65c229dcd7d034a6143f5.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/mudkip/Walk-Offsets.png"
-dest_files=["res://.godot/imported/Walk-Offsets.png-edccb8146f2431d7b7012c16d501d8a1.ctex"]
+source_file="res://assets/mudkip/Sleep-Shadow.png"
+dest_files=["res://.godot/imported/Sleep-Shadow.png-66269374c7f65c229dcd7d034a6143f5.ctex"]
 
 [params]
 

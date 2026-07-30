@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://d0lyb3cf7ypac"
-path="res://.godot/imported/Walk-Offsets.png-edccb8146f2431d7b7012c16d501d8a1.ctex"
+uid="uid://cjc3w4te270gm"
+path="res://.godot/imported/Tumble-Offsets.png-f182023574d3d308e392efaaf2fe1735.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/mudkip/Walk-Offsets.png"
-dest_files=["res://.godot/imported/Walk-Offsets.png-edccb8146f2431d7b7012c16d501d8a1.ctex"]
+source_file="res://assets/mudkip/Tumble-Offsets.png"
+dest_files=["res://.godot/imported/Tumble-Offsets.png-f182023574d3d308e392efaaf2fe1735.ctex"]
 
 [params]
 

@@ -21,7 +21,7 @@ func _ready() -> void:
 func setup(data: PokeData):
 	pokemon_data = data
 	animation_controller.setup(data)
-	behavior_controller.start()
+	behavior_controller.start(data)
 
 func _physics_process(_delta: float) -> void:
 	velocity = movement_controller.get_velocity()

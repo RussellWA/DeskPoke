@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://d0lyb3cf7ypac"
-path="res://.godot/imported/Walk-Offsets.png-edccb8146f2431d7b7012c16d501d8a1.ctex"
+uid="uid://b3llkhtpysbh2"
+path="res://.godot/imported/Float-Offsets.png-ffc9d5e195f102c5b2719b53c23d4e27.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/mudkip/Walk-Offsets.png"
-dest_files=["res://.godot/imported/Walk-Offsets.png-edccb8146f2431d7b7012c16d501d8a1.ctex"]
+source_file="res://assets/mudkip/Float-Offsets.png"
+dest_files=["res://.godot/imported/Float-Offsets.png-ffc9d5e195f102c5b2719b53c23d4e27.ctex"]
 
 [params]
 

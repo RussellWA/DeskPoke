@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://d0lyb3cf7ypac"
-path="res://.godot/imported/Walk-Offsets.png-edccb8146f2431d7b7012c16d501d8a1.ctex"
+uid="uid://dc6ki6gph5gnk"
+path="res://.godot/imported/LeapForth-Anim.png-3ef5a97181d277c3309d2a0fe53312fc.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/mudkip/Walk-Offsets.png"
-dest_files=["res://.godot/imported/Walk-Offsets.png-edccb8146f2431d7b7012c16d501d8a1.ctex"]
+source_file="res://assets/mudkip/LeapForth-Anim.png"
+dest_files=["res://.godot/imported/LeapForth-Anim.png-3ef5a97181d277c3309d2a0fe53312fc.ctex"]
 
 [params]
 

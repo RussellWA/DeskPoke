@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://d0lyb3cf7ypac"
-path="res://.godot/imported/Walk-Offsets.png-edccb8146f2431d7b7012c16d501d8a1.ctex"
+uid="uid://cfg6tjuwhhdea"
+path="res://.godot/imported/HitGround-Anim.png-d155a3a3668ea752c2e980d2571bc9b4.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/mudkip/Walk-Offsets.png"
-dest_files=["res://.godot/imported/Walk-Offsets.png-edccb8146f2431d7b7012c16d501d8a1.ctex"]
+source_file="res://assets/mudkip/HitGround-Anim.png"
+dest_files=["res://.godot/imported/HitGround-Anim.png-d155a3a3668ea752c2e980d2571bc9b4.ctex"]
 
 [params]
 
