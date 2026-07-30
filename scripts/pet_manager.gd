@@ -18,6 +18,10 @@ func spawn_pet(data: PokeData):
 	
 	pet.position.x = DesktopController.desktop_rect.size.x / 2.0
 	pet.position.y = DesktopController.get_ground_y()
+	
+	print("pet pos ", pet.position)
+	
+	print()
 
 	pets.append(pet)
 

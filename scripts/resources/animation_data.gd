@@ -8,5 +8,5 @@ var frame_height: int = 0
 
 var durations: Array[int] = []
 
-var offsets: Array[FrameOffset] = []
 var sprite_frames: SpriteFrames
+var ground_offset: int = 0
