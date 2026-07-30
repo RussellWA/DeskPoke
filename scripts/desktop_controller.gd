@@ -22,33 +22,48 @@ func get_ground_y() -> float:
 func _process(delta):
 	var active_pets = get_tree().get_nodes_in_group("pets")
 	
-	# 1. Get the global OS mouse position and convert it to local window coordinates
-	var os_mouse_pos = DisplayServer.mouse_get_position()
-	var window_pos = get_window().position
-	var local_mouse_pos = Vector2(os_mouse_pos - window_pos)
-	
-	var is_hovering_pet = false
-	
-	# 2. Check if the mouse is hovering over ANY pet's collision area
-	for pet in active_pets:
-		var shape = pet.get_node_or_null("CollisionShape2D")
+	# This array will hold the points of our clickable areas
+	var poly = PackedVector2Array()
+
+	if active_pets.is_empty():
+		# If there are no pets, make a tiny 1x1 pixel in the corner clickable.
+		# This makes 99.9% of your screen completely passthrough to the desktop.
+		poly.append(Vector2(0, 0))
+		poly.append(Vector2(1, 0))
+		poly.append(Vector2(1, 1))
+		poly.append(Vector2(0, 1))
+	else:
+		var hub_point = Vector2.ZERO
 		
-		if shape and shape.shape is RectangleShape2D:
-			# Calculate the pet's true bounding box on screen, factoring in the scale
-			var rect_size = shape.shape.size * pet.scale
+		for i in range(active_pets.size()):
+			var pet = active_pets[i]
+			var shape = pet.get_node_or_null("CollisionShape2D")
 			
-			# Use the collision box offset (-20) that we set up earlier!
-			var center_pos = pet.global_position + (shape.position * pet.scale)
-			var pet_rect = Rect2(center_pos - (rect_size / 2.0), rect_size)
-			
-			# If the OS mouse is inside this box, we are hovering a pet
-			if pet_rect.has_point(local_mouse_pos):
-				is_hovering_pet = true
-				break # Stop checking, we found one!
+			if shape and shape.shape is RectangleShape2D:
+				# 1. Get the true bounding box size and center
+				var rect_size = shape.shape.size * pet.scale
+				var center_pos = pet.global_position + (shape.position * pet.scale)
 				
-	# 3. Toggle the window's passthrough state based on our check
-	var should_passthrough = not is_hovering_pet
-	
-	# Only update the window if the state actually changed (saves performance)
-	if get_window().mouse_passthrough != should_passthrough:
-		get_window().mouse_passthrough = should_passthrough
+				# 2. Calculate the 4 corners of the pet's collision box
+				var top_left = center_pos - (rect_size / 2.0)
+				var top_right = top_left + Vector2(rect_size.x, 0)
+				var bottom_right = top_left + rect_size
+				var bottom_left = top_left + Vector2(0, rect_size.y)
+				
+				# 3. Save the very first point of the first pet as our "Hub"
+				if i == 0:
+					hub_point = top_left
+					
+				# 4. Draw the square around the pet
+				poly.append(top_left)
+				poly.append(top_right)
+				poly.append(bottom_right)
+				poly.append(bottom_left)
+				
+				# 5. Close the square, and trace a zero-width line back to the Hub
+				# This connects all pets into "one polygon" without blocking the desktop!
+				poly.append(top_left)
+				poly.append(hub_point) 
+
+	# Send the final polygon to the Operating System
+	DisplayServer.window_set_mouse_passthrough(poly)
