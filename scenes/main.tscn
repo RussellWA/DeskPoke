@@ -55,7 +55,6 @@ text = "Snap"
 [node name="PokeList" type="ItemList" parent="UIWindow/CanvasLayer/UIPanel/VBoxContainer" unique_id=431984756]
 layout_mode = 2
 size_flags_vertical = 3
-select_mode = 1
 
 [node name="SpawnMenu" type="HBoxContainer" parent="UIWindow/CanvasLayer/UIPanel/VBoxContainer" unique_id=370767468]
 layout_mode = 2

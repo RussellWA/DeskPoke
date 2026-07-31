@@ -97,15 +97,14 @@ func _on_spawn_btn_pressed() -> void:
 	
 	if selected_indexes.is_empty():
 		return
+	
+	var pokemon_name = pokemon_list.get_item_text(selected_indexes[0])
+	var folder_path = imported_pokemon[pokemon_name] 
 
-	for index in selected_indexes:
-		var pokemon_name = pokemon_list.get_item_text(index)
-		var folder_path = imported_pokemon[pokemon_name] 
+	var importer = PokemonImporter.new()
+	var new_pokemon_data = importer.import_pokemon(folder_path)
 
-		var importer = PokemonImporter.new()
-		var new_pokemon_data = importer.import_pokemon(folder_path)
-
-		$"../../../PetManager".spawn_pet(new_pokemon_data)
+	$"../../../PetManager".spawn_pet(new_pokemon_data)
 		
 	pokemon_list.deselect_all()
 
@@ -124,7 +123,3 @@ func _on_down_btn_pressed() -> void:
 	for pet in get_tree().get_nodes_in_group("pets"):
 		if pet.scale.x > 0.4: # Prevent shrinking to zero
 			pet.scale -= Vector2(0.2, 0.2)
-
-var is_menu_open: bool = true
-var full_menu_size: Vector2i = Vector2i(300, 400)
-var collapsed_size: Vector2i = Vector2i(64, 64) # Make this the size of your small logo button
