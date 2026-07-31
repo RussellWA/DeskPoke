@@ -1,0 +1,97 @@
+[gd_scene format=3 uid="uid://csixj172s2h2e"]
+
+[ext_resource type="Script" uid="uid://weh26rec21sn" path="res://scripts/main.gd" id="1_0wfyh"]
+[ext_resource type="Script" uid="uid://dhcr4pu6jjqwk" path="res://scripts/desktop_controller.gd" id="1_o5qli"]
+[ext_resource type="Script" uid="uid://bd2tt8vx85crq" path="res://scripts/pet_manager.gd" id="3_jyhfs"]
+[ext_resource type="Script" uid="uid://31d8382uqkug" path="res://scripts/ui/ui_panel.gd" id="4_jyhfs"]
+[ext_resource type="Script" uid="uid://bcsu7cctfxlkq" path="res://scripts/ui/ui_window.gd" id="4_tbgi4"]
+
+[node name="Main" type="Node2D" unique_id=1108470153]
+script = ExtResource("1_0wfyh")
+
+[node name="DesktopController" type="Node" parent="." unique_id=1250325230]
+script = ExtResource("1_o5qli")
+
+[node name="PetManager" type="Node" parent="." unique_id=1937642252]
+script = ExtResource("3_jyhfs")
+
+[node name="UIWindow" type="Window" parent="." unique_id=679730277]
+transparent_bg = true
+oversampling_override = 1.0
+title = "Menu"
+size = Vector2i(150, 250)
+borderless = true
+always_on_top = true
+transparent = true
+unfocusable = true
+script = ExtResource("4_tbgi4")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="UIWindow" unique_id=17504988]
+
+[node name="UIPanel" type="PanelContainer" parent="UIWindow/CanvasLayer" unique_id=1488318496]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_vertical = 3
+script = ExtResource("4_jyhfs")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="UIWindow/CanvasLayer/UIPanel" unique_id=411186552]
+layout_mode = 2
+
+[node name="CloseBtn" type="Button" parent="UIWindow/CanvasLayer/UIPanel/VBoxContainer" unique_id=1561770705]
+layout_mode = 2
+text = "X"
+
+[node name="ImportZipButton" type="Button" parent="UIWindow/CanvasLayer/UIPanel/VBoxContainer" unique_id=1837200098]
+layout_mode = 2
+text = "Import"
+
+[node name="SnapBtn" type="Button" parent="UIWindow/CanvasLayer/UIPanel/VBoxContainer" unique_id=861994012]
+layout_mode = 2
+text = "Snap"
+
+[node name="PokeList" type="ItemList" parent="UIWindow/CanvasLayer/UIPanel/VBoxContainer" unique_id=431984756]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="SpawnMenu" type="HBoxContainer" parent="UIWindow/CanvasLayer/UIPanel/VBoxContainer" unique_id=370767468]
+layout_mode = 2
+
+[node name="SpawnBtn" type="Button" parent="UIWindow/CanvasLayer/UIPanel/VBoxContainer/SpawnMenu" unique_id=1786739064]
+layout_mode = 2
+text = "Spawn"
+
+[node name="DespawnBtn" type="Button" parent="UIWindow/CanvasLayer/UIPanel/VBoxContainer/SpawnMenu" unique_id=234279107]
+layout_mode = 2
+text = "Despawn"
+
+[node name="ScaleMenu" type="HBoxContainer" parent="UIWindow/CanvasLayer/UIPanel/VBoxContainer" unique_id=781141157]
+layout_mode = 2
+
+[node name="DownBtn" type="Button" parent="UIWindow/CanvasLayer/UIPanel/VBoxContainer/ScaleMenu" unique_id=152303428]
+layout_mode = 2
+text = "-"
+
+[node name="UpBtn" type="Button" parent="UIWindow/CanvasLayer/UIPanel/VBoxContainer/ScaleMenu" unique_id=1366181563]
+layout_mode = 2
+text = "+"
+
+[node name="OpenBtn" type="Button" parent="UIWindow" unique_id=1636036442]
+visible = false
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "OPEN"
+
+[connection signal="pressed" from="UIWindow/CanvasLayer/UIPanel/VBoxContainer/CloseBtn" to="UIWindow" method="_on_close_btn_pressed"]
+[connection signal="pressed" from="UIWindow/CanvasLayer/UIPanel/VBoxContainer/ImportZipButton" to="UIWindow/CanvasLayer/UIPanel" method="_on_import_zip_button_pressed"]
+[connection signal="pressed" from="UIWindow/CanvasLayer/UIPanel/VBoxContainer/SnapBtn" to="UIWindow" method="_on_snap_btn_pressed"]
+[connection signal="pressed" from="UIWindow/CanvasLayer/UIPanel/VBoxContainer/SpawnMenu/SpawnBtn" to="UIWindow/CanvasLayer/UIPanel" method="_on_spawn_btn_pressed"]
+[connection signal="pressed" from="UIWindow/CanvasLayer/UIPanel/VBoxContainer/SpawnMenu/DespawnBtn" to="UIWindow/CanvasLayer/UIPanel" method="_on_despawn_btn_pressed"]
+[connection signal="pressed" from="UIWindow/CanvasLayer/UIPanel/VBoxContainer/ScaleMenu/DownBtn" to="UIWindow/CanvasLayer/UIPanel" method="_on_down_btn_pressed"]
+[connection signal="pressed" from="UIWindow/CanvasLayer/UIPanel/VBoxContainer/ScaleMenu/UpBtn" to="UIWindow/CanvasLayer/UIPanel" method="_on_up_btn_pressed"]
+[connection signal="pressed" from="UIWindow/OpenBtn" to="UIWindow" method="_on_open_btn_pressed"]

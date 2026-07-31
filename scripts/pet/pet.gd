@@ -2,6 +2,9 @@ extends CharacterBody2D
 
 class_name Pet
 
+signal on_despawned
+var is_despawning: bool = false
+
 var window_size: Vector2i
 
 var pokemon_data: PokeData
@@ -49,10 +52,31 @@ func _process(delta: float) -> void:
 		global_position = get_global_mouse_position() + drag_offset
 
 func _on_input_event(viewport: Node, event: InputEvent, shape_idx: int) -> void:
-	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
-		if event.pressed:
-			is_dragging = true
-			drag_offset = global_position - get_global_mouse_position()
-			velocity = Vector2.ZERO
-		else:
-			is_dragging = false
+	if is_despawning:
+		return
+	
+	if event is InputEventMouseButton:
+		if event.button_index == MOUSE_BUTTON_LEFT:
+			if event.pressed:
+				is_dragging = true
+				drag_offset = global_position - get_global_mouse_position()
+				velocity = Vector2.ZERO
+			else:
+				is_dragging = false
+		elif event.button_index == MOUSE_BUTTON_RIGHT and event.pressed:
+				if Input.is_key_pressed(KEY_CTRL):
+					despawn()
+
+func despawn() -> void:
+	if is_despawning:
+		return
+		
+	is_despawning = true
+	is_dragging = false # Release mouse lock immediately
+	
+	on_despawned.emit() 
+	
+	var tween = create_tween().set_parallel(true)
+	tween.tween_property(self, "scale", Vector2.ZERO, 0.25).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_IN)
+	tween.tween_property(self, "modulate:a", 0.0, 0.25)
+	tween.chain().tween_callback(queue_free)

@@ -110,9 +110,9 @@ func _on_spawn_btn_pressed() -> void:
 
 func _on_despawn_btn_pressed() -> void:
 	var pets = get_tree().get_nodes_in_group("pets")
-	if not pets.is_empty():
-		# Despawn the last spawned pet
-		pets[-1].queue_free()
+	for pet in pets:
+		pet.queue_free()
+	pokemon_list.deselect_all()
 
 func _on_up_btn_pressed() -> void:
 	var selected_indexes = pokemon_list.get_selected_items()

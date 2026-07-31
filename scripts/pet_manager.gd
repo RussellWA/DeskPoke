@@ -18,10 +18,12 @@ func spawn_pet(data: PokeData):
 	pet.setup(data)
 	pet.position.x = DesktopController.desktop_rect.size.x / 2.0
 	pet.position.y = DesktopController.get_ground_y()
+	
+	pet.on_despawned.connect(_on_pet_despawned)
 
 	pets.append(pet)
 
-func despawn_pet(pet: Pet) -> void:
+func recall_pet(pet: Pet) -> void:
 	if not pets.has(pet):
 		return
 
@@ -30,3 +32,12 @@ func despawn_pet(pet: Pet) -> void:
 
 func get_pets() -> Array[Pet]:
 	return pets
+
+func _on_pet_despawned(despawning_pet: Pet) -> void:
+	# You now have full access to the exact pet that is despawning!
+	var data = despawning_pet.pokemon_data
+	
+	print("PetManager noticed a pet is despawning!")
+	# print("It was: ", data.pokemon_name) # (If your PokeData has a name variable)
+	
+	# You can now do whatever the manager needs to do with this specific data!

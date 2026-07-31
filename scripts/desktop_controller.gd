@@ -27,15 +27,10 @@ func get_ground_y() -> float:
 	return desktop_rect.size.y
 
 func _process(delta: float) -> void:
-	# ANTI-MINIMIZE FORCEFIELD
 	if get_window().mode == Window.MODE_MINIMIZED:
 		get_window().mode = Window.MODE_WINDOWED
-		
-	# 1. GATHER ALL RECTANGLES (Pets + UI)
-	var rects: Array[Rect2] = []
 	
-	# -> ADD YOUR UI PANEL RECTANGLE HERE! 
-	# Example: rects.append(ui_panel.get_global_rect())
+	var rects: Array[Rect2] = []
 	
 	var active_pets = get_tree().get_nodes_in_group("pets")
 	for pet in active_pets:
@@ -58,8 +53,6 @@ func _process(delta: float) -> void:
 				
 				rects.append(Rect2(top_left, total_size))
 
-	# 2. MERGE OVERLAPPING RECTANGLES
-	# If two pets walk past each other, this merges them into one big box so lines never cross!
 	var finished_merging = false
 	while not finished_merging:
 		finished_merging = true
@@ -75,11 +68,10 @@ func _process(delta: float) -> void:
 			if not finished_merging:
 				break
 
-	# 3. SORT FROM LEFT TO RIGHT
-	# We must process the boxes from left to right so the comb teeth never double-back.
+	# Must process the boxes from left to right so the comb teeth never double-back.
 	rects.sort_custom(func(a, b): return a.position.x < b.position.x)
 
-	# 4. BUILD THE "COMB" POLYGON
+	# BUILD COMB POLYGON
 	var poly = PackedVector2Array()
 	poly.append(Vector2(0, 0)) # Start at top-left of monitor
 	
@@ -106,5 +98,4 @@ func _process(delta: float) -> void:
 	poly.append(Vector2(screen_width, 0))
 	poly.append(Vector2(0, 0))
 	
-	# Apply to OS
 	DisplayServer.window_set_mouse_passthrough(poly)
