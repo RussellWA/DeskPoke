@@ -43,7 +43,7 @@ func _process(delta: float) -> void:
 		if sprite and sprite.sprite_frames:
 			var tex = sprite.sprite_frames.get_frame_texture(sprite.animation, sprite.frame)
 			if tex:
-				var padding = Vector2(40, 40)
+				var padding = Vector2(10, 10)
 				var tex_size = tex.get_size() * sprite.global_scale
 				var offset = sprite.offset * sprite.global_scale
 				
@@ -52,6 +52,9 @@ func _process(delta: float) -> void:
 					
 				var top_left = (sprite.global_position + offset - padding).round()
 				var total_size = (tex_size + (padding * 2.0)).round()
+				
+				#var top_left = (sprite.global_position + offset).round()
+				#var total_size = tex_size.round()
 				
 				rects.append(Rect2(top_left, total_size))
 
