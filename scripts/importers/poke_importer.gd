@@ -2,7 +2,6 @@ extends RefCounted
 class_name PokemonImporter
 
 func import_pokemon(folder_path: String) -> PokeData:
-	print("folder ", folder_path)
 	var pokemon := PokeData.new()
 
 	var xml_parser := AnimXmlParser.new()

@@ -33,7 +33,6 @@ func _process(delta):
 	var poly = PackedVector2Array()
 	var active_pets = get_tree().get_nodes_in_group("pets")
 	
-	# If there are no pets, make the passthrough a tiny 1-pixel dot so it doesn't block the screen
 	if active_pets.is_empty():
 		poly.append(Vector2(0, 0))
 		poly.append(Vector2(1, 0))
@@ -42,7 +41,6 @@ func _process(delta):
 		DisplayServer.window_set_mouse_passthrough(poly)
 		return
 
-	# If there ARE pets, draw the polygon just for them
 	var hub_point = Vector2.ZERO
 	var has_hub = false
 

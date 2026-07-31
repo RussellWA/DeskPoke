@@ -20,19 +20,15 @@ func snap_to_corner(corner: int) -> void:
 		Corner.TOP_LEFT:
 			new_pos.x = screen_rect.position.x
 			new_pos.y = screen_rect.position.y
-			print("new pos: ", new_pos)
 		Corner.TOP_RIGHT:
 			new_pos.x = screen_rect.position.x + screen_rect.size.x - win_size.x
 			new_pos.y = screen_rect.position.y
-			print("new pos: ", new_pos)
 		Corner.BOTTOM_LEFT:
 			new_pos.x = screen_rect.position.x
 			new_pos.y = screen_rect.position.y + screen_rect.size.y - win_size.y
-			print("new pos: ", new_pos)
 		Corner.BOTTOM_RIGHT:
 			new_pos.x = screen_rect.position.x + screen_rect.size.x - win_size.x
 			new_pos.y = screen_rect.position.y + screen_rect.size.y - win_size.y
-			print("new pos: ", new_pos)
 			
 	window.position = new_pos
 	
