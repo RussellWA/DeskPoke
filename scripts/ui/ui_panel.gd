@@ -1,6 +1,6 @@
 extends PanelContainer
 
-@export var pet_scene: PackedScene # Assign your Pet.tscn here in Inspector
+@export var pet_scene: PackedScene
 
 var file_dialog: FileDialog
 @onready var pokemon_list: ItemList = $VBoxContainer/PokeList
@@ -124,3 +124,7 @@ func _on_down_btn_pressed() -> void:
 	for pet in get_tree().get_nodes_in_group("pets"):
 		if pet.scale.x > 0.4: # Prevent shrinking to zero
 			pet.scale -= Vector2(0.2, 0.2)
+
+var is_menu_open: bool = true
+var full_menu_size: Vector2i = Vector2i(300, 400)
+var collapsed_size: Vector2i = Vector2i(64, 64) # Make this the size of your small logo button
