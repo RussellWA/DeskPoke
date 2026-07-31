@@ -23,6 +23,7 @@ size = Vector2i(150, 250)
 borderless = true
 always_on_top = true
 transparent = true
+unfocusable = true
 script = ExtResource("4_tbgi4")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="UIWindow" unique_id=17504988]
