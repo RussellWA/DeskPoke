@@ -2,15 +2,14 @@ extends RefCounted
 class_name SpriteSheetImporter
 
 func import_animation(
-	image_path: String,
+	image: Image,
 	anim: AnimationData,
 	row: Direction.Facing
 ) -> SpriteFrames:
-	var texture = load(image_path)
-
+	var texture = ImageTexture.create_from_image(image)
+	
 	if texture == null:
-		push_error("Couldn't load sprite sheet.")
-		return null
+		print("Could not get texture from image")
 	
 	var sprite_frames := SpriteFrames.new()
 	sprite_frames.add_animation(anim.name)

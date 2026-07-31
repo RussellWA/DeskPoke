@@ -1,7 +1,8 @@
 extends Node
 
-@onready var ui_panel: Control = $"../CanvasLayer/UIPanel"
+var ui_panel: PanelContainer
 var desktop_rect: Rect2i
+var last_poly: PackedVector2Array = []
 
 func _ready() -> void:
 	var current_screen = DisplayServer.window_get_current_screen()
@@ -27,8 +28,7 @@ func _process(delta):
 
 	var hub_point = Vector2.ZERO
 	var has_hub = false
-
-	# 1. ADD UI PANEL TO PASSTHROUGH POLYGON (So clicks work on UI buttons!)
+	
 	if ui_panel and ui_panel.visible:
 		var rect = ui_panel.get_global_rect()
 		var top_left = rect.position
@@ -45,7 +45,6 @@ func _process(delta):
 		poly.append(bottom_left)
 		poly.append(top_left)
 
-	# 2. ADD PETS TO PASSTHROUGH POLYGON (Your existing code)
 	for i in range(active_pets.size()):
 		var pet = active_pets[i]
 		var sprite = pet.get_node_or_null("AnimatedSprite2D")
@@ -82,5 +81,7 @@ func _process(delta):
 		poly.append(Vector2(1, 0))
 		poly.append(Vector2(1, 1))
 		poly.append(Vector2(0, 1))
-
-	DisplayServer.window_set_mouse_passthrough(poly)
+	
+	if poly != last_poly:
+		DisplayServer.window_set_mouse_passthrough(poly)
+		last_poly = poly

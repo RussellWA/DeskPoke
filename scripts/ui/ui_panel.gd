@@ -3,11 +3,15 @@ extends PanelContainer
 @export var pet_scene: PackedScene # Assign your Pet.tscn here in Inspector
 
 var file_dialog: FileDialog
-@onready var pokemon_list: ItemList = $CanvasLayer/UIPanel/VBoxContainer/ItemList
+@onready var pokemon_list: ItemList = $VBoxContainer/PokeList
 
 var imported_pokemon: Dictionary = {}
 
 func _ready() -> void:
+	DesktopController.ui_panel = self
+	
+	scan_for_imported_pokemon()
+	
 	file_dialog = FileDialog.new()
 	file_dialog.access = FileDialog.ACCESS_FILESYSTEM
 	file_dialog.use_native_dialog = true
@@ -17,10 +21,9 @@ func _ready() -> void:
 	file_dialog.filters = ["*.zip ; Zip Files"]
 	file_dialog.file_selected.connect(_on_zip_selected)
 
-# --- ZIP IMPORT SYSTEM ---
 func _on_zip_selected(path: String) -> void:
 	var zip_name = path.get_file().get_basename()
-	var target_folder = "res://assets/" + zip_name + "/"
+	var target_folder = "user://assets/" + zip_name + "/"
 	
 	var dir_err = DirAccess.make_dir_recursive_absolute(target_folder)
 	if dir_err != OK and dir_err != ERR_ALREADY_EXISTS:
@@ -41,21 +44,45 @@ func _on_zip_selected(path: String) -> void:
 			
 		# Read raw byte buffer from ZIP
 		var buffer = zip.read_file(internal_path)
-		
-		# Get the clean file name (e.g., "idle_01.png")
+
 		var destination_path = target_folder + internal_path
 		
-		# Save the file to disk inside res://assets/<zip_name>/
+		var base_dir = destination_path.get_base_dir()
+		if not DirAccess.dir_exists_absolute(base_dir):
+			DirAccess.make_dir_recursive_absolute(base_dir)
+		
 		var file = FileAccess.open(destination_path, FileAccess.WRITE)
 		if file:
 			file.store_buffer(buffer)
 			file.close()
-			print("Extracted: ", destination_path)
 
 	zip.close()
-	# Refresh UI List
-	#_update_pokemon_list_ui()
-	#print("Successfully imported: ", pokemon_name)
+	
+	scan_for_imported_pokemon()
+
+func scan_for_imported_pokemon() -> void:
+	var base_path = "user://assets/"
+
+	if not DirAccess.dir_exists_absolute(base_path):
+		DirAccess.make_dir_recursive_absolute(base_path)
+		return # Nothing to load yet!
+
+	var dir = DirAccess.open(base_path)
+	if dir:
+		dir.list_dir_begin()
+		var folder_name = dir.get_next()
+
+		while folder_name != "":
+			if dir.current_is_dir() and not folder_name.begins_with("."):
+				
+				var full_folder_path = base_path + folder_name + "/"
+				imported_pokemon[folder_name] = full_folder_path
+				
+			folder_name = dir.get_next()
+			
+		dir.list_dir_end()
+
+	_update_pokemon_list_ui()
 
 func _update_pokemon_list_ui() -> void:
 	pokemon_list.clear()
@@ -63,30 +90,24 @@ func _update_pokemon_list_ui() -> void:
 		pokemon_list.add_item(p_name)
 
 func _on_import_zip_button_pressed() -> void:
-	print("this")
 	file_dialog.popup_centered(Vector2i(600, 400))
 
 func _on_spawn_btn_pressed() -> void:
 	var selected_indexes = pokemon_list.get_selected_items()
+	
 	if selected_indexes.is_empty():
 		return
+
+	for index in selected_indexes:
+		var pokemon_name = pokemon_list.get_item_text(index)
+		var folder_path = imported_pokemon[pokemon_name] 
+
+		var importer = PokemonImporter.new()
+		var new_pokemon_data = importer.import_pokemon(folder_path)
+
+		$"../../PetManager".spawn_pet(new_pokemon_data)
 		
-	var pokemon_name = pokemon_list.get_item_text(selected_indexes[0])
-	var frames = imported_pokemon[pokemon_name]
-
-	# Instantiate pet
-	var new_pet = pet_scene.instantiate()
-	new_pet.add_to_group("pets")
-	
-	# Middle of usable desktop space
-	new_pet.global_position = Vector2(960, 540) 
-	
-	add_child(new_pet)
-
-	# Set the animated sprite frames
-	var anim_sprite = new_pet.get_node("AnimatedSprite2D")
-	anim_sprite.sprite_frames = frames
-	anim_sprite.play("default")
+	pokemon_list.deselect_all()
 
 func _on_despawn_btn_pressed() -> void:
 	var pets = get_tree().get_nodes_in_group("pets")

@@ -2,6 +2,7 @@ extends RefCounted
 class_name PokemonImporter
 
 func import_pokemon(folder_path: String) -> PokeData:
+	print("folder ", folder_path)
 	var pokemon := PokeData.new()
 
 	var xml_parser := AnimXmlParser.new()
@@ -28,13 +29,12 @@ func import_pokemon(folder_path: String) -> PokeData:
 			)
 			
 			anim.ground_offset = offset
-
 		
-		anim.sprite_frames = sprite_importer.import_animation(
-			sprite_path,
-			anim,
-			facing_int
-		)
+			anim.sprite_frames = sprite_importer.import_animation(
+				image,
+				anim,
+				facing_int
+			)
 		
 		pokemon.animations[anim.name] = anim
 	
