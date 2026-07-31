@@ -14,9 +14,17 @@ script = ExtResource("1_o5qli")
 [node name="PetManager" type="Node" parent="." unique_id=1937642252]
 script = ExtResource("3_jyhfs")
 
-[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=17504988]
+[node name="UIWindow" type="Window" parent="." unique_id=679730277]
+transparent_bg = true
+oversampling_override = 1.0
+title = "Menu"
+size = Vector2i(150, 250)
+borderless = true
+transparent = true
 
-[node name="UIPanel" type="PanelContainer" parent="CanvasLayer" unique_id=1488318496]
+[node name="CanvasLayer" type="CanvasLayer" parent="UIWindow" unique_id=17504988]
+
+[node name="UIPanel" type="PanelContainer" parent="UIWindow/CanvasLayer" unique_id=1488318496]
 custom_minimum_size = Vector2(150, 250)
 anchors_preset = 3
 anchor_left = 1.0
@@ -30,42 +38,42 @@ grow_vertical = 0
 size_flags_vertical = 3
 script = ExtResource("4_jyhfs")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/UIPanel" unique_id=411186552]
+[node name="VBoxContainer" type="VBoxContainer" parent="UIWindow/CanvasLayer/UIPanel" unique_id=411186552]
 layout_mode = 2
 
-[node name="ImportZipButton" type="Button" parent="CanvasLayer/UIPanel/VBoxContainer" unique_id=1837200098]
+[node name="ImportZipButton" type="Button" parent="UIWindow/CanvasLayer/UIPanel/VBoxContainer" unique_id=1837200098]
 layout_mode = 2
 text = "Import"
 
-[node name="PokeList" type="ItemList" parent="CanvasLayer/UIPanel/VBoxContainer" unique_id=431984756]
+[node name="PokeList" type="ItemList" parent="UIWindow/CanvasLayer/UIPanel/VBoxContainer" unique_id=431984756]
 layout_mode = 2
 size_flags_vertical = 3
 select_mode = 1
 
-[node name="SpawnMenu" type="HBoxContainer" parent="CanvasLayer/UIPanel/VBoxContainer" unique_id=370767468]
+[node name="SpawnMenu" type="HBoxContainer" parent="UIWindow/CanvasLayer/UIPanel/VBoxContainer" unique_id=370767468]
 layout_mode = 2
 
-[node name="SpawnBtn" type="Button" parent="CanvasLayer/UIPanel/VBoxContainer/SpawnMenu" unique_id=1786739064]
+[node name="SpawnBtn" type="Button" parent="UIWindow/CanvasLayer/UIPanel/VBoxContainer/SpawnMenu" unique_id=1786739064]
 layout_mode = 2
 text = "Spawn"
 
-[node name="DespawnBtn" type="Button" parent="CanvasLayer/UIPanel/VBoxContainer/SpawnMenu" unique_id=234279107]
+[node name="DespawnBtn" type="Button" parent="UIWindow/CanvasLayer/UIPanel/VBoxContainer/SpawnMenu" unique_id=234279107]
 layout_mode = 2
 text = "Despawn"
 
-[node name="ScaleMenu" type="HBoxContainer" parent="CanvasLayer/UIPanel/VBoxContainer" unique_id=781141157]
+[node name="ScaleMenu" type="HBoxContainer" parent="UIWindow/CanvasLayer/UIPanel/VBoxContainer" unique_id=781141157]
 layout_mode = 2
 
-[node name="DownBtn" type="Button" parent="CanvasLayer/UIPanel/VBoxContainer/ScaleMenu" unique_id=152303428]
+[node name="DownBtn" type="Button" parent="UIWindow/CanvasLayer/UIPanel/VBoxContainer/ScaleMenu" unique_id=152303428]
 layout_mode = 2
 text = "-"
 
-[node name="UpBtn" type="Button" parent="CanvasLayer/UIPanel/VBoxContainer/ScaleMenu" unique_id=1366181563]
+[node name="UpBtn" type="Button" parent="UIWindow/CanvasLayer/UIPanel/VBoxContainer/ScaleMenu" unique_id=1366181563]
 layout_mode = 2
 text = "+"
 
-[connection signal="pressed" from="CanvasLayer/UIPanel/VBoxContainer/ImportZipButton" to="CanvasLayer/UIPanel" method="_on_import_zip_button_pressed"]
-[connection signal="pressed" from="CanvasLayer/UIPanel/VBoxContainer/SpawnMenu/SpawnBtn" to="CanvasLayer/UIPanel" method="_on_spawn_btn_pressed"]
-[connection signal="pressed" from="CanvasLayer/UIPanel/VBoxContainer/SpawnMenu/DespawnBtn" to="CanvasLayer/UIPanel" method="_on_despawn_btn_pressed"]
-[connection signal="pressed" from="CanvasLayer/UIPanel/VBoxContainer/ScaleMenu/DownBtn" to="CanvasLayer/UIPanel" method="_on_down_btn_pressed"]
-[connection signal="pressed" from="CanvasLayer/UIPanel/VBoxContainer/ScaleMenu/UpBtn" to="CanvasLayer/UIPanel" method="_on_up_btn_pressed"]
+[connection signal="pressed" from="UIWindow/CanvasLayer/UIPanel/VBoxContainer/ImportZipButton" to="UIWindow/CanvasLayer/UIPanel" method="_on_import_zip_button_pressed"]
+[connection signal="pressed" from="UIWindow/CanvasLayer/UIPanel/VBoxContainer/SpawnMenu/SpawnBtn" to="UIWindow/CanvasLayer/UIPanel" method="_on_spawn_btn_pressed"]
+[connection signal="pressed" from="UIWindow/CanvasLayer/UIPanel/VBoxContainer/SpawnMenu/DespawnBtn" to="UIWindow/CanvasLayer/UIPanel" method="_on_despawn_btn_pressed"]
+[connection signal="pressed" from="UIWindow/CanvasLayer/UIPanel/VBoxContainer/ScaleMenu/DownBtn" to="UIWindow/CanvasLayer/UIPanel" method="_on_down_btn_pressed"]
+[connection signal="pressed" from="UIWindow/CanvasLayer/UIPanel/VBoxContainer/ScaleMenu/UpBtn" to="UIWindow/CanvasLayer/UIPanel" method="_on_up_btn_pressed"]

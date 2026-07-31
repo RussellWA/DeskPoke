@@ -105,7 +105,7 @@ func _on_spawn_btn_pressed() -> void:
 		var importer = PokemonImporter.new()
 		var new_pokemon_data = importer.import_pokemon(folder_path)
 
-		$"../../PetManager".spawn_pet(new_pokemon_data)
+		$"../../../PetManager".spawn_pet(new_pokemon_data)
 		
 	pokemon_list.deselect_all()
 
