@@ -26,61 +26,82 @@ func get_right_boundary() -> float:
 func get_ground_y() -> float:
 	return desktop_rect.size.y
 
-func _process(delta):
+func _process(delta: float) -> void:
+	# ANTI-MINIMIZE FORCEFIELD
 	if get_window().mode == Window.MODE_MINIMIZED:
 		get_window().mode = Window.MODE_WINDOWED
-
-	var poly = PackedVector2Array()
-	var active_pets = get_tree().get_nodes_in_group("pets")
+		
+	# 1. GATHER ALL RECTANGLES (Pets + UI)
+	var rects: Array[Rect2] = []
 	
-	if active_pets.is_empty():
-		poly.append(Vector2(0, 0))
-		poly.append(Vector2(1, 0))
-		poly.append(Vector2(1, 1))
-		poly.append(Vector2(0, 1))
-		DisplayServer.window_set_mouse_passthrough(poly)
-		return
-
-	var hub_point = Vector2.ZERO
-	var has_hub = false
-
+	# -> ADD YOUR UI PANEL RECTANGLE HERE! 
+	# Example: rects.append(ui_panel.get_global_rect())
+	
+	var active_pets = get_tree().get_nodes_in_group("pets")
 	for pet in active_pets:
 		var sprite = pet.get_node_or_null("AnimatedSprite2D")
-		
 		if sprite and sprite.sprite_frames:
-			var texture = sprite.sprite_frames.get_frame_texture(sprite.animation, sprite.frame)
-			
-			if texture:
-				var tex_size = texture.get_size()
-				var offset = sprite.offset
+			var tex = sprite.sprite_frames.get_frame_texture(sprite.animation, sprite.frame)
+			if tex:
+				var padding = Vector2(40, 40)
+				var tex_size = tex.get_size() * sprite.global_scale
+				var offset = sprite.offset * sprite.global_scale
 				
 				if sprite.centered:
 					offset -= tex_size / 2.0
 					
-				var top_left = sprite.global_position + (offset * sprite.global_scale)
-				var rect_size = tex_size * sprite.global_scale
+				var top_left = (sprite.global_position + offset - padding).round()
+				var total_size = (tex_size + (padding * 2.0)).round()
 				
-				var top_right = top_left + Vector2(rect_size.x, 0)
-				var bottom_right = top_left + rect_size
-				var bottom_left = top_left + Vector2(0, rect_size.y)
-				
-				if not has_hub:
-					hub_point = top_left
-					has_hub = true
-				
-				poly.append(top_left)
-				poly.append(top_right)
-				poly.append(bottom_right)
-				poly.append(bottom_left)
-				
-				# Close the square, and trace a zero-width line back to the Hub
-				poly.append(top_left)
-				poly.append(hub_point)
+				rects.append(Rect2(top_left, total_size))
 
-	# Clean the array to prevent Windows crashes
-	var clean_poly = PackedVector2Array()
-	for pt in poly:
-		if clean_poly.is_empty() or clean_poly[clean_poly.size() - 1] != pt:
-			clean_poly.append(pt)
+	# 2. MERGE OVERLAPPING RECTANGLES
+	# If two pets walk past each other, this merges them into one big box so lines never cross!
+	var finished_merging = false
+	while not finished_merging:
+		finished_merging = true
+		for i in range(rects.size()):
+			for j in range(i + 1, rects.size()):
+				if rects[i].intersects(rects[j]):
+					var merged_rect = rects[i].merge(rects[j])
+					rects.remove_at(j)
+					rects.remove_at(i)
+					rects.append(merged_rect)
+					finished_merging = false
+					break
+			if not finished_merging:
+				break
 
-	DisplayServer.window_set_mouse_passthrough(clean_poly)
+	# 3. SORT FROM LEFT TO RIGHT
+	# We must process the boxes from left to right so the comb teeth never double-back.
+	rects.sort_custom(func(a, b): return a.position.x < b.position.x)
+
+	# 4. BUILD THE "COMB" POLYGON
+	var poly = PackedVector2Array()
+	poly.append(Vector2(0, 0)) # Start at top-left of monitor
+	
+	for r in rects:
+		var tl = r.position
+		var tr = tl + Vector2(r.size.x, 0)
+		var br = tl + r.size
+		var bl = tl + Vector2(0, r.size.y)
+		
+		var drop_point = Vector2(tl.x, 0)
+		
+		# Trace along the top edge, drop down, trace the box, and go straight back up
+		poly.append(drop_point)
+		poly.append(tl)
+		poly.append(tr)
+		poly.append(br)
+		poly.append(bl)
+		poly.append(tl)
+		poly.append(drop_point)
+		
+	# Close the polygon at the top-right of the monitor
+	var current_screen = DisplayServer.window_get_current_screen()
+	var screen_width = DisplayServer.screen_get_usable_rect(current_screen).size.x
+	poly.append(Vector2(screen_width, 0))
+	poly.append(Vector2(0, 0))
+	
+	# Apply to OS
+	DisplayServer.window_set_mouse_passthrough(poly)
