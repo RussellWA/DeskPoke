@@ -8,14 +8,19 @@ func _ready() -> void:
 	var window = get_window()
 	var current_screen = DisplayServer.window_get_current_screen()
 	desktop_rect = DisplayServer.screen_get_usable_rect(current_screen)
+	var scale_factor = DisplayServer.screen_get_scale(current_screen)
 	
-	window.mode = Window.MODE_WINDOWED
+	window.size = desktop_rect.size
+	window.position = desktop_rect.position
+	
 	window.borderless = true
 	window.transparent = true 
 	window.transparent_bg = true
 	window.always_on_top = true
+	get_viewport().transparent_bg = true
 	window.unfocusable = true
 	
+	window.mode = Window.MODE_MAXIMIZED
 
 func get_left_boundary() -> float:
 	return 0.0
@@ -91,7 +96,7 @@ func _process(delta: float) -> void:
 		poly.append(bl)
 		poly.append(tl)
 		poly.append(drop_point)
-		
+	
 	# Close the polygon at the top-right of the monitor
 	var current_screen = DisplayServer.window_get_current_screen()
 	var screen_width = DisplayServer.screen_get_usable_rect(current_screen).size.x

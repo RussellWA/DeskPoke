@@ -22,7 +22,7 @@ var gravity: float = 1200.0
 func _ready() -> void:
 	window_size = get_window().size
 	scale = Vector2.ONE * pet_scale
-	
+
 	get_viewport().transparent_bg = true
 
 func setup(data: PokeData):
@@ -40,11 +40,14 @@ func _physics_process(delta: float) -> void:
 		velocity.x = controller_vel.x
 
 		velocity.y += gravity * delta
-		
-		move_and_slide()
 
-		if global_position.y > DesktopController.get_ground_y(): 
-			global_position.y = DesktopController.get_ground_y()
+		move_and_slide()
+		
+		var ground_y = get_viewport().get_visible_rect().size.y
+		ground_y -= pokemon_data.ground_offset
+
+		if global_position.y > ground_y:
+			global_position.y = ground_y
 			velocity.y = 0
 
 func _process(delta: float) -> void:
@@ -54,7 +57,7 @@ func _process(delta: float) -> void:
 func _on_input_event(viewport: Node, event: InputEvent, shape_idx: int) -> void:
 	if is_despawning:
 		return
-	
+
 	if event is InputEventMouseButton:
 		if event.button_index == MOUSE_BUTTON_LEFT:
 			if event.pressed:
@@ -64,18 +67,18 @@ func _on_input_event(viewport: Node, event: InputEvent, shape_idx: int) -> void:
 			else:
 				is_dragging = false
 		elif event.button_index == MOUSE_BUTTON_RIGHT and event.pressed:
-				if Input.is_key_pressed(KEY_CTRL):
-					despawn()
+			if event.double_click: 
+				despawn()
 
 func despawn() -> void:
 	if is_despawning:
 		return
-		
+
 	is_despawning = true
 	is_dragging = false # Release mouse lock immediately
-	
-	on_despawned.emit() 
-	
+
+	on_despawned.emit()
+
 	var tween = create_tween().set_parallel(true)
 	tween.tween_property(self, "scale", Vector2.ZERO, 0.25).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_IN)
 	tween.tween_property(self, "modulate:a", 0.0, 0.25)

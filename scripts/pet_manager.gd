@@ -16,8 +16,18 @@ func spawn_pet(data: PokeData):
 	add_child(pet)
 	
 	pet.setup(data)
-	pet.position.x = DesktopController.desktop_rect.size.x / 2.0
-	pet.position.y = DesktopController.get_ground_y()
+	#pet.position.x = DesktopController.desktop_rect.size.x / 2.0
+	#pet.position.y = DesktopController.get_ground_y()
+	var window_size = get_viewport().get_visible_rect().size
+	pet.global_position = Vector2(window_size.x / 2.0, 100)
+	
+	print("Screen size:", DisplayServer.screen_get_size())
+	print("Window size:", DisplayServer.window_get_size())
+	print("Desktop rect:", DesktopController.desktop_rect)
+	print("Viewport:", get_viewport().get_visible_rect())
+	print("Scale:", DisplayServer.screen_get_scale())
+	
+	print("Pet Pos ", pet.position)
 	
 	pet.on_despawned.connect(_on_pet_despawned)
 
