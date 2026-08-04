@@ -9,9 +9,8 @@ func _ready() -> void:
 func snap_to_corner(corner: int) -> void:
 	# Because this script is inside the UIWindow, get_window() gets the UI window!
 	var window = get_window() 
-	
-	var current_screen = DisplayServer.window_get_current_screen()
-	var screen_rect = DisplayServer.screen_get_usable_rect(current_screen)
+
+	var screen_rect = DesktopController.desktop_rect
 	var win_size = window.size
 	
 	var new_pos = Vector2i()

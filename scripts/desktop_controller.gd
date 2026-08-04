@@ -8,7 +8,6 @@ func _ready() -> void:
 	var window = get_window()
 	var current_screen = DisplayServer.window_get_current_screen()
 	desktop_rect = DisplayServer.screen_get_usable_rect(current_screen)
-	var scale_factor = DisplayServer.screen_get_scale(current_screen)
 	
 	window.size = desktop_rect.size
 	window.position = desktop_rect.position
@@ -29,9 +28,12 @@ func get_right_boundary() -> float:
 	return desktop_rect.size.x
 
 func get_ground_y() -> float:
-	return desktop_rect.size.y
+	return get_viewport().get_visible_rect().size.y
+	
+func get_ground_x() -> float:
+	return get_viewport().get_visible_rect().size.x
 
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	if get_window().mode == Window.MODE_MINIMIZED:
 		get_window().mode = Window.MODE_WINDOWED
 	

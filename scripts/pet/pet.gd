@@ -43,18 +43,17 @@ func _physics_process(delta: float) -> void:
 
 		move_and_slide()
 		
-		var ground_y = get_viewport().get_visible_rect().size.y
-		ground_y -= pokemon_data.ground_offset
+		var ground_y = DesktopController.get_ground_y()
 
 		if global_position.y > ground_y:
 			global_position.y = ground_y
 			velocity.y = 0
 
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	if is_dragging:
 		global_position = get_global_mouse_position() + drag_offset
 
-func _on_input_event(viewport: Node, event: InputEvent, shape_idx: int) -> void:
+func _on_input_event(_viewport: Node, event: InputEvent, _shape_idx: int) -> void:
 	if is_despawning:
 		return
 

@@ -15,7 +15,7 @@ func import_animation(
 	sprite_frames.add_animation(anim.name)
 	
 	var image_width = texture.get_width()
-	var image_height = texture.get_height()
+	#var image_height = texture.get_height()
 
 	var columns = image_width / anim.frame_width
 	
@@ -40,7 +40,7 @@ func import_animation(
 
 func calculate_ground_offset_for_row(
 	image: Image,
-	frame_width: int,
+	_frame_width: int,
 	frame_height: int,
 	row_index: int
 ) -> int:

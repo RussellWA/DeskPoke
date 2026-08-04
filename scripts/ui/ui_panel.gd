@@ -115,7 +115,7 @@ func _on_despawn_btn_pressed() -> void:
 	pokemon_list.deselect_all()
 
 func _on_up_btn_pressed() -> void:
-	var selected_indexes = pokemon_list.get_selected_items()
+	#var selected_indexes = pokemon_list.get_selected_items()
 	for pet in get_tree().get_nodes_in_group("pets"):
 		pet.scale += Vector2(0.2, 0.2)
 

@@ -17,9 +17,10 @@ func import_pokemon(folder_path: String) -> PokeData:
 		
 		var image = Image.load_from_file(sprite_path)
 		
-		var facing_int = get_facing(anim.name)
 		
 		if image != null:
+			var facing_int = get_facing(anim.name)
+			
 			var offset = sprite_importer.calculate_ground_offset_for_row(
 				image,
 				anim.frame_width,
@@ -45,12 +46,16 @@ func get_facing(anim_name: String) -> int:
 			return Direction.Facing.RIGHT
 		"Run":
 			return Direction.Facing.RIGHT
-		"Attack":
-			return Direction.Facing.RIGHT
+		#"Attack":
+			#return Direction.Facing.RIGHT
 
 		"Pose":
 			return Direction.Facing.DOWN
 		"Idle":
+			return Direction.Facing.DOWN
+		"Hop":
+			return Direction.Facing.DOWN
+		"Nod":
 			return Direction.Facing.DOWN
 		"Sleep":
 			return Direction.Facing.DOWN
