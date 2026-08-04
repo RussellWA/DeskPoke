@@ -63,7 +63,7 @@ layout_mode = 2
 layout_mode = 2
 text = "Spawn"
 
-[node name="RecallBtn" type="Button" parent="UIWindow/CanvasLayer/UIPanel/VBoxContainer/SpawnMenu" unique_id=234279107]
+[node name="DespawnBtn" type="Button" parent="UIWindow/CanvasLayer/UIPanel/VBoxContainer/SpawnMenu" unique_id=234279107]
 layout_mode = 2
 text = "Recall"
 
@@ -125,7 +125,7 @@ text = "Close"
 [connection signal="pressed" from="UIWindow/CanvasLayer/UIPanel/VBoxContainer/ImportZipButton" to="UIWindow/CanvasLayer/UIPanel" method="_on_import_zip_button_pressed"]
 [connection signal="pressed" from="UIWindow/CanvasLayer/UIPanel/VBoxContainer/SnapBtn" to="UIWindow" method="_on_snap_btn_pressed"]
 [connection signal="pressed" from="UIWindow/CanvasLayer/UIPanel/VBoxContainer/SpawnMenu/SpawnBtn" to="UIWindow/CanvasLayer/UIPanel" method="_on_spawn_btn_pressed"]
-[connection signal="pressed" from="UIWindow/CanvasLayer/UIPanel/VBoxContainer/SpawnMenu/RecallBtn" to="UIWindow/CanvasLayer/UIPanel" method="_on_recall_btn_pressed"]
+[connection signal="pressed" from="UIWindow/CanvasLayer/UIPanel/VBoxContainer/SpawnMenu/DespawnBtn" to="UIWindow/CanvasLayer/UIPanel" method="_on_despawn_btn_pressed"]
 [connection signal="pressed" from="UIWindow/OpenBtn" to="UIWindow" method="_on_open_btn_pressed"]
 [connection signal="value_changed" from="InspectorWindow/CanvasLayer/PetPanel/VBoxContainer/ScaleSlider" to="InspectorWindow" method="_on_scale_slider_value_changed"]
 [connection signal="pressed" from="InspectorWindow/CanvasLayer/PetPanel/VBoxContainer/DespawnBtn" to="InspectorWindow" method="_on_despawn_btn_pressed"]

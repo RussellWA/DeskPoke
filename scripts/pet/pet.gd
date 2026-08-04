@@ -2,6 +2,7 @@ extends CharacterBody2D
 
 class_name Pet
 
+signal on_right_clicked(pet_node: Node)
 signal on_despawned
 var is_despawning: bool = false
 
@@ -66,8 +67,7 @@ func _on_input_event(_viewport: Node, event: InputEvent, _shape_idx: int) -> voi
 			else:
 				is_dragging = false
 		elif event.button_index == MOUSE_BUTTON_RIGHT and event.pressed:
-			if event.double_click: 
-				despawn()
+			on_right_clicked.emit(self)
 
 func despawn() -> void:
 	if is_despawning:
@@ -75,8 +75,6 @@ func despawn() -> void:
 
 	is_despawning = true
 	is_dragging = false # Release mouse lock immediately
-
-	on_despawned.emit()
 
 	var tween = create_tween().set_parallel(true)
 	tween.tween_property(self, "scale", Vector2.ZERO, 0.25).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_IN)

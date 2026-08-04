@@ -5,6 +5,8 @@ const MAX_PETS := 6
 
 var pets: Array[Pet] = []
 
+@export var inspector_window: Window
+
 func spawn_pet(data: PokeData):
 	if pets.size() >= MAX_PETS:
 		return
@@ -18,6 +20,8 @@ func spawn_pet(data: PokeData):
 	pet.setup(data)
 	var ground_x = DesktopController.get_ground_y()
 	pet.global_position = Vector2(ground_x / 2.0, 200)
+	
+	pet.on_right_clicked.connect(inspector_window.open_for_pet)
 
 	#print("Screen size:", DisplayServer.screen_get_size())
 	#print("Window size:", DisplayServer.window_get_size())
@@ -25,19 +29,16 @@ func spawn_pet(data: PokeData):
 	#print("Viewport:", get_viewport().get_visible_rect())
 	#print("Scale:", DisplayServer.screen_get_scale())
 	#print("Pet Pos ", pet.position)
-	
-	pet.on_despawned.connect(_on_pet_despawned)
 
 	pets.append(pet)
 
 func get_pets() -> Array[Pet]:
 	return pets
 
-func _on_pet_despawned(despawning_pet: Pet) -> void:
-	var pet = despawning_pet.pokemon_data
+func _on_ui_panel_recall_pets() -> void:
+	var all_pets = get_tree().get_nodes_in_group("pets")
+	for pet in all_pets:
+		pet.despawn()
+		pets.erase(pet)
+		pet.queue_free()
 	
-	if not pets.has(pet):
-		return
-
-	pets.erase(pet)
-	pet.queue_free()

@@ -3,7 +3,13 @@ extends Window
 enum Corner { BOTTOM_RIGHT, BOTTOM_LEFT, TOP_LEFT, TOP_RIGHT }
 var current_corner: int = Corner.BOTTOM_RIGHT
 
+var is_menu_open: bool = true
+var full_menu_size: Vector2i 
+var collapsed_size: Vector2i
+
 func _ready() -> void:
+	full_menu_size = Vector2i($CanvasLayer/UIPanel.size)
+	collapsed_size = Vector2i($OpenBtn.size)
 	snap_to_corner(current_corner)
 
 func snap_to_corner(corner: int) -> void:
@@ -30,10 +36,6 @@ func snap_to_corner(corner: int) -> void:
 			new_pos.y = screen_rect.position.y + screen_rect.size.y - win_size.y
 			
 	window.position = new_pos
-	
-var is_menu_open: bool = true
-var full_menu_size: Vector2i = Vector2i(300, 400)
-var collapsed_size: Vector2i = Vector2i(64, 64) # Make this the size of your small logo button
 
 func toggle_menu(open: bool) -> void:
 	is_menu_open = open
@@ -55,7 +57,6 @@ func _on_open_btn_pressed() -> void:
 
 func _on_close_btn_pressed() -> void:
 	toggle_menu(false)
-
 
 func _on_snap_btn_pressed() -> void:
 	current_corner = (current_corner + 1) % 4 

@@ -9,7 +9,8 @@ func import_pokemon(folder_path: String) -> PokeData:
 
 	var animations = xml_parser.parse(folder_path)
 	
-	pokemon.name = folder_path.get_file()
+	var actual_folder_name = folder_path.trim_suffix("/").get_file()
+	pokemon.name = actual_folder_name
 	pokemon.shadow_size = 1
 	
 	for anim in animations:

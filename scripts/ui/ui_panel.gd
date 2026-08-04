@@ -1,5 +1,7 @@
 extends PanelContainer
 
+signal recall_pets()
+
 @export var pet_scene: PackedScene
 
 var file_dialog: FileDialog
@@ -20,6 +22,17 @@ func _ready() -> void:
 	file_dialog.file_mode = FileDialog.FILE_MODE_OPEN_FILE
 	file_dialog.filters = ["*.zip ; Zip Files"]
 	file_dialog.file_selected.connect(_on_zip_selected)
+	
+	# --- TEMPORARY AUTO-SPAWN TEST ---
+	# 1. Wait 3 seconds so the app has time to fully load
+	await get_tree().create_timer(3.0).timeout
+	
+	# 2. Automatically select the 1st item in your UI list (Index 0)
+	if pokemon_list.get_item_count() > 0:
+		pokemon_list.select(0)
+		
+		# 3. Trick the game into thinking you clicked the button!
+		_on_spawn_btn_pressed()
 
 func _on_zip_selected(path: String) -> void:
 	var zip_name = path.get_file().get_basename()
@@ -105,21 +118,13 @@ func _on_spawn_btn_pressed() -> void:
 	var new_pokemon_data = importer.import_pokemon(folder_path)
 
 	$"../../../PetManager".spawn_pet(new_pokemon_data)
-		
+	
 	pokemon_list.deselect_all()
 
-func _on_despawn_btn_pressed() -> void:
+
+func _on_recall_btn_pressed() -> void:
 	var pets = get_tree().get_nodes_in_group("pets")
 	for pet in pets:
 		pet.queue_free()
 	pokemon_list.deselect_all()
-
-func _on_up_btn_pressed() -> void:
-	#var selected_indexes = pokemon_list.get_selected_items()
-	for pet in get_tree().get_nodes_in_group("pets"):
-		pet.scale += Vector2(0.2, 0.2)
-
-func _on_down_btn_pressed() -> void:
-	for pet in get_tree().get_nodes_in_group("pets"):
-		if pet.scale.x > 0.4: # Prevent shrinking to zero
-			pet.scale -= Vector2(0.2, 0.2)
+	recall_pets.emit()
