@@ -33,10 +33,7 @@ func load_animation(animation_name: String):
 	sprite.offset.y = center_y - anim.ground_offset
 	collision.position.y = center_y - anim.ground_offset - 4
 	
-	print("anim name ", animation_name)
-	
 	var target_speed = animation_speeds.get(animation_name, 8.0)
-	print("speed ", target_speed)
 	sprite.sprite_frames.set_animation_speed(animation_name, target_speed)
 		
 	play(animation_name)
@@ -83,15 +80,10 @@ func enter_dragged() -> void:
 		load_animation("Idle")
 
 func play_landing_sequence() -> void:
-	print("Hit ground")
 	if pokemon_data.animations["HitGround"] != null:
-		print("success")
 		load_animation("HitGround")
 		sprite.sprite_frames.set_animation_loop("HitGround", false)
 		await sprite.animation_finished
-	#else:
-		#load_animation("Idle")
-		#await get_tree().create_timer(0.2).timeout
 
 func play(animation_name: String):
 	sprite.play(animation_name)

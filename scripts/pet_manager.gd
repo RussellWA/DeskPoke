@@ -23,13 +23,6 @@ func spawn_pet(data: PokeData):
 	
 	pet.on_right_clicked.connect(inspector_window.open_for_pet)
 
-	#print("Screen size:", DisplayServer.screen_get_size())
-	#print("Window size:", DisplayServer.window_get_size())
-	#print("Desktop rect:", DesktopController.desktop_rect)
-	#print("Viewport:", get_viewport().get_visible_rect())
-	#print("Scale:", DisplayServer.screen_get_scale())
-	#print("Pet Pos ", pet.position)
-
 	pets.append(pet)
 
 func get_pets() -> Array[Pet]:

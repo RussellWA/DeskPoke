@@ -18,8 +18,8 @@ enum State {
 	LANDING
 }
 
-var max_energy: float = 100.0
-var energy: float = 100.0
+var max_energy: float = 200.0
+var energy: float = 200.0
 
 var state: State
 var idle_anims: Array[String] = []
@@ -51,14 +51,14 @@ func enter_idle() -> void:
 	movement_controller.stop()
 	var random_idle = idle_anims.pick_random()
 	animation_controller.enter_idle(random_idle)
-	timer.start(4)
+	timer.start(randi_range(3, 6))
 
 func enter_walking() -> void:
 	state = State.WALKING
 	var random_dir = [-1, 1].pick_random()
 	animation_controller.enter_walk(random_dir)
 	movement_controller.walk(random_dir)
-	timer.start(6)
+	timer.start(randi_range(6, 9))
 
 func _on_movement_controller_hit_left() -> void:
 	movement_controller.walk(1)
