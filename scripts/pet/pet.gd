@@ -2,6 +2,8 @@ extends CharacterBody2D
 
 class_name Pet
 
+@onready var anim_sprite = $AnimatedSprite2D
+
 signal on_right_clicked(pet_node: Node)
 signal on_despawned
 var is_despawning: bool = false

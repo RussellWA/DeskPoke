@@ -12,12 +12,16 @@ enum State {
 	IDLE,
 	WALKING,
 	SLEEPING,
+	WAKING_UP,
 	DRAGGED
 }
 
+var max_energy: float = 100.0
+var energy: float = 100.0
+
 var state: State
 var idle_anims: Array[String] = []
-var possible_idles = ["Idle", "Pose", "Nod", "Hop"]
+var possible_idles = ["Idle", "Pose", "Nod", "Hop", "Twirl"]
 
 func start(data: PokeData) -> void:
 	pokemon_data = data
@@ -61,3 +65,37 @@ func _on_movement_controller_hit_left() -> void:
 func _on_movement_controller_hit_right() -> void:
 	movement_controller.walk(-1)
 	animation_controller.enter_walk(-1)
+
+func _physics_process(delta: float) -> void:
+	if not pet or pet.is_despawning:
+		return
+
+	if not pet.is_on_floor():
+		pet.velocity.y += 980 * delta
+
+	match state:
+		State.SLEEPING:
+			energy += 15.0 * delta 
+			pet.velocity.x = 0
+			
+			if energy >= max_energy:
+				wake_up()
+				
+		State.WALKING:
+			energy -= 10.0 * delta
+			
+			if energy <= 0:
+				go_to_sleep()
+				
+	pet.move_and_slide()
+
+func go_to_sleep() -> void:
+	state = State.SLEEPING
+	timer.stop()
+	movement_controller.stop()
+	animation_controller.play_sleep_sequence()
+
+func wake_up() -> void:
+	state = State.WAKING_UP
+	await animation_controller.play_wake_sequence()
+	enter_idle()

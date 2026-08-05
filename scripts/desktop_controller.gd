@@ -105,4 +105,4 @@ func _process(_delta: float) -> void:
 	poly.append(Vector2(screen_width, 0))
 	poly.append(Vector2(0, 0))
 	
-	DisplayServer.window_set_mouse_passthrough(poly)
+	#DisplayServer.window_set_mouse_passthrough(poly)

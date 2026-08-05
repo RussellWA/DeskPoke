@@ -47,9 +47,6 @@ func get_facing(anim_name: String) -> int:
 			return Direction.Facing.RIGHT
 		"Run":
 			return Direction.Facing.RIGHT
-		#"Attack":
-			#return Direction.Facing.RIGHT
-
 		"Pose":
 			return Direction.Facing.DOWN
 		"Idle":
@@ -60,8 +57,9 @@ func get_facing(anim_name: String) -> int:
 			return Direction.Facing.DOWN
 		"Sleep":
 			return Direction.Facing.DOWN
-		"Hurt":
+		"Sleep":
 			return Direction.Facing.DOWN
-
+		"Twirl":
+			return Direction.Facing.DOWN
 		_:
 			return Direction.Facing.DOWN

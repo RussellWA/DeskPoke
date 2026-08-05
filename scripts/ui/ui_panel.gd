@@ -24,14 +24,10 @@ func _ready() -> void:
 	file_dialog.file_selected.connect(_on_zip_selected)
 	
 	# --- TEMPORARY AUTO-SPAWN TEST ---
-	# 1. Wait 3 seconds so the app has time to fully load
 	await get_tree().create_timer(3.0).timeout
 	
-	# 2. Automatically select the 1st item in your UI list (Index 0)
 	if pokemon_list.get_item_count() > 0:
 		pokemon_list.select(0)
-		
-		# 3. Trick the game into thinking you clicked the button!
 		_on_spawn_btn_pressed()
 
 func _on_zip_selected(path: String) -> void:
