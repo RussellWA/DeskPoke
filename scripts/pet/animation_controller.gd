@@ -15,7 +15,8 @@ var animation_speeds: Dictionary = {
 	"Pose": 10.0,
 	"Twirl": 10.0,
 	"Sleep": 2.0,
-	"EventSleep": 3.0
+	"EventSleep": 3.0,
+	"Landing": 5.0,
 }
 
 func setup(data: PokeData):
@@ -74,6 +75,23 @@ func play_wake_sequence() -> void:
 		await sprite.animation_finished
 		
 	load_animation("Idle")
+
+func enter_dragged() -> void:
+	if pokemon_data.animations["Cringe"] != null:
+		load_animation("Cringe")
+	else:
+		load_animation("Idle")
+
+func play_landing_sequence() -> void:
+	print("Hit ground")
+	if pokemon_data.animations["HitGround"] != null:
+		print("success")
+		load_animation("HitGround")
+		sprite.sprite_frames.set_animation_loop("HitGround", false)
+		await sprite.animation_finished
+	#else:
+		#load_animation("Idle")
+		#await get_tree().create_timer(0.2).timeout
 
 func play(animation_name: String):
 	sprite.play(animation_name)

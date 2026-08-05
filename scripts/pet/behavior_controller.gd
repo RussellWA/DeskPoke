@@ -13,7 +13,9 @@ enum State {
 	WALKING,
 	SLEEPING,
 	WAKING_UP,
-	DRAGGED
+	DRAGGED,
+	FALLING,
+	LANDING
 }
 
 var max_energy: float = 100.0
@@ -69,11 +71,22 @@ func _on_movement_controller_hit_right() -> void:
 func _physics_process(delta: float) -> void:
 	if not pet or pet.is_despawning:
 		return
+	
+	if state == State.DRAGGED:
+		return
 
-	if not pet.is_on_floor():
+	if not pet.check_if_on_floor():
 		pet.velocity.y += 980 * delta
+	else:
+		pet.global_position.y = DesktopController.get_ground_y()
+		pet.velocity.y = 0 
+		pet.velocity.x = 0
 
 	match state:
+		State.FALLING:
+			if pet.check_if_on_floor():
+				hit_the_ground()
+			
 		State.SLEEPING:
 			energy += 15.0 * delta 
 			pet.velocity.x = 0
@@ -99,3 +112,18 @@ func wake_up() -> void:
 	state = State.WAKING_UP
 	await animation_controller.play_wake_sequence()
 	enter_idle()
+
+func enter_dragged() -> void:
+	state = State.DRAGGED
+	timer.stop()
+	movement_controller.stop()
+	pet.velocity = Vector2.ZERO
+	animation_controller.enter_dragged()
+
+func exit_dragged() -> void:
+	state = State.FALLING
+	
+func hit_the_ground() -> void:
+	state = State.LANDING
+	await animation_controller.play_landing_sequence()
+	wake_up()

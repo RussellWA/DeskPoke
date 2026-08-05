@@ -64,10 +64,12 @@ func _on_input_event(_viewport: Node, event: InputEvent, _shape_idx: int) -> voi
 		if event.button_index == MOUSE_BUTTON_LEFT:
 			if event.pressed:
 				is_dragging = true
-				drag_offset = global_position - get_global_mouse_position()
-				velocity = Vector2.ZERO
+				behavior_controller.enter_dragged()
+				#drag_offset = global_position - get_global_mouse_position()
+				#velocity = Vector2.ZERO
 			else:
 				is_dragging = false
+				behavior_controller.exit_dragged()
 		elif event.button_index == MOUSE_BUTTON_RIGHT and event.pressed:
 			on_right_clicked.emit(self)
 
@@ -82,3 +84,9 @@ func despawn() -> void:
 	tween.tween_property(self, "scale", Vector2.ZERO, 0.25).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_IN)
 	tween.tween_property(self, "modulate:a", 0.0, 0.25)
 	tween.chain().tween_callback(queue_free)
+
+func check_if_on_floor() -> bool:
+	var ground_y = DesktopController.get_ground_y()
+	if global_position.y == ground_y:
+		return true
+	return false
