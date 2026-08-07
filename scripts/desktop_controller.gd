@@ -21,10 +21,17 @@ func _ready() -> void:
 	
 	window.mode = Window.MODE_MAXIMIZED
 
-func get_left_boundary() -> float:
+func get_left_boundary(width: float) -> float:
+	if width:
+		var padding = width / 2.0
+		return 0.0 + padding
 	return 0.0
 
-func get_right_boundary() -> float:
+func get_right_boundary(width: float) -> float:
+	if width:
+		var padding = width/ 2.0
+		return desktop_rect.size.x - padding 
+		
 	return desktop_rect.size.x
 
 func get_ground_y() -> float:

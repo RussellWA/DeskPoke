@@ -4,9 +4,32 @@
 [ext_resource type="Script" uid="uid://dvy741no20jqk" path="res://scripts/pet/movement_controller.gd" id="2_8wqpi"]
 [ext_resource type="Script" uid="uid://xlfwr808xv0p" path="res://scripts/pet/animation_controller.gd" id="3_axfbl"]
 [ext_resource type="Script" uid="uid://d008n0avr4f5y" path="res://scripts/pet/behavior_controller.gd" id="3_hmkkh"]
+[ext_resource type="Texture2D" uid="uid://cxumxbg87ufvp" path="res://assets/PokeBalls.png" id="5_6nmc3"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_hmkkh"]
 size = Vector2(25, 25)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_axfbl"]
+atlas = ExtResource("5_6nmc3")
+region = Rect2(32, 0, 16, 17)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5c8qe"]
+atlas = ExtResource("5_6nmc3")
+region = Rect2(32, 17, 16, 17)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_hio3l"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_axfbl")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_5c8qe")
+}],
+"loop": false,
+"name": &"open",
+"speed": 0.0
+}]
 
 [node name="Pet" type="CharacterBody2D" unique_id=922571468]
 collision_mask = 0
@@ -31,6 +54,11 @@ shape = SubResource("RectangleShape2D_hmkkh")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=918383455]
 animation = &""
+
+[node name="PokeballSprite" type="AnimatedSprite2D" parent="." unique_id=508118824]
+visible = false
+sprite_frames = SubResource("SpriteFrames_hio3l")
+animation = &"open"
 
 [connection signal="input_event" from="." to="." method="_on_input_event"]
 [connection signal="hit_left" from="MovementController" to="BehaviorController" method="_on_movement_controller_hit_left"]

@@ -15,7 +15,6 @@ run/main_scene="uid://csixj172s2h2e"
 config/features=PackedStringArray("4.6", "GL Compatibility")
 run/max_fps=60
 run/low_processor_mode=true
-config/icon="res://icon.svg"
 
 [autoload]
 

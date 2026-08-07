@@ -13,10 +13,10 @@ var direction: int = 1
 var moving: bool = false
 
 func _physics_process(_delta: float) -> void:
-	if pet.position.x <= DesktopController.get_left_boundary():
+	if pet.position.x <= DesktopController.get_left_boundary(pet.get_scaled_width()):
 		hit_left.emit()
 	
-	if pet.position.x >= DesktopController.get_right_boundary():
+	if pet.position.x >= DesktopController.get_right_boundary(pet.get_scaled_width()):
 		hit_right.emit()
 
 func walk(dir: int):

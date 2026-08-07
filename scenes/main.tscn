@@ -111,6 +111,8 @@ text = "Size"
 
 [node name="ScaleSlider" type="HSlider" parent="InspectorWindow/CanvasLayer/PetPanel/VBoxContainer" unique_id=631897366]
 layout_mode = 2
+min_value = 1.0
+value = 1.0
 
 [node name="DespawnBtn" type="Button" parent="InspectorWindow/CanvasLayer/PetPanel/VBoxContainer" unique_id=1471315563]
 layout_mode = 2

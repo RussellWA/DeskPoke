@@ -4,6 +4,7 @@ extends Node
 @onready var collision: CollisionShape2D = $"../CollisionShape2D"
 
 var pokemon_data: PokeData
+var calculated_width: int = 0
 
 var animation_speeds: Dictionary = {
 	"Walk": 10.0,
@@ -35,6 +36,11 @@ func load_animation(animation_name: String):
 	
 	var target_speed = animation_speeds.get(animation_name, 8.0)
 	sprite.sprite_frames.set_animation_speed(animation_name, target_speed)
+	
+	if calculated_width == 0:
+		var texture = sprite.sprite_frames.get_frame_texture(animation_name, 0)
+		if texture != null:
+			calculated_width = texture.get_width()
 		
 	play(animation_name)
 

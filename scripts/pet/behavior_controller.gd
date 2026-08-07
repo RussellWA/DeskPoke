@@ -25,7 +25,7 @@ var state: State
 var idle_anims: Array[String] = []
 var possible_idles = ["Idle", "Pose", "Nod", "Hop", "Twirl"]
 
-func start(data: PokeData) -> void:
+func setup(data: PokeData) -> void:
 	pokemon_data = data
 	
 	idle_anims.clear()
@@ -36,8 +36,6 @@ func start(data: PokeData) -> void:
 	
 	if idle_anims.is_empty():
 		push_warning("No idle animations found for " + pokemon_data.name)
-	
-	enter_walking()
 
 func _on_timer_timeout():
 	match state:
@@ -89,7 +87,7 @@ func _physics_process(delta: float) -> void:
 			
 		State.SLEEPING:
 			energy += 15.0 * delta 
-			pet.velocity.x = 0
+			movement_controller.stop()
 			
 			if energy >= max_energy:
 				wake_up()
@@ -116,7 +114,7 @@ func wake_up() -> void:
 func enter_dragged() -> void:
 	state = State.DRAGGED
 	timer.stop()
-	movement_controller.stop()
+	movement_controller.stop()	
 	pet.velocity = Vector2.ZERO
 	animation_controller.enter_dragged()
 

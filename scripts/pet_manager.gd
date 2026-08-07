@@ -18,8 +18,10 @@ func spawn_pet(data: PokeData):
 	add_child(pet)
 	
 	pet.setup(data)
-	var ground_x = DesktopController.get_ground_y()
-	pet.global_position = Vector2(ground_x / 2.0, 200)
+	var ground_x = DesktopController.get_ground_x()
+	var ground_y = DesktopController.get_ground_y()
+	pet.global_position = Vector2(ground_x / 2.0, ground_y)
+	pet.spawn_sequence(Vector2(ground_x / 2.0, ground_y))
 	
 	pet.on_right_clicked.connect(inspector_window.open_for_pet)
 
